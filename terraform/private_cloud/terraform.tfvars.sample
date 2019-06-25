@@ -1,5 +1,0 @@
-customer_id = "stevenpeer"
-aws_region = "us-east-1"
-ten_dot_what = "234"
-peer_vpc_id = "vpc-dcaf2bbb"
-peer_account_id = "668666347261"

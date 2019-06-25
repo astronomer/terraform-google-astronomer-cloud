@@ -1,3 +1,0 @@
-variable "content" {
-  type = "string"
-}
