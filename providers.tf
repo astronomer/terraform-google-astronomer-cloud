@@ -43,7 +43,7 @@ provider "helm" {
   install_tiller  = true
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.14.1"
   kubernetes {
-    config_path = module.gcp.kubeconfig_filename
+    config_path      = module.gcp.kubeconfig_filename
     load_config_file = true
   }
 }
