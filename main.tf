@@ -1,21 +1,21 @@
 module "gcp" {
-  source = "astronomer/astronomer-gcp/google"
-  //  version              = "0.2.3"
-  admin_emails       = [var.email]
-  deployment_id      = var.deployment_id
-  dns_managed_zone   = var.dns_managed_zone
-  project            = var.project
+  source           = "astronomer/astronomer-gcp/google"
+  version          = "0.2.3"
+  admin_emails     = [var.email]
+  deployment_id    = var.deployment_id
+  dns_managed_zone = var.dns_managed_zone
+  project          = var.project
 }
 
 module "system_components" {
-  source = "astronomer/astronomer-system-components/kubernetes"
-  //  version      = "0.0.3"
+  source       = "astronomer/astronomer-system-components/kubernetes"
+  version      = "0.0.3"
   enable_istio = "true"
 }
 
 module "astronomer" {
-  source = "astronomer/astronomer/kubernetes"
-  //  version = "1.0.2"
+  source                = "astronomer/astronomer/kubernetes"
+  version               = "1.0.2"
   base_domain           = module.gcp.base_domain
   db_connection_string  = module.gcp.db_connection_string
   tls_cert              = module.gcp.tls_cert
