@@ -37,8 +37,14 @@ sleep 5 # give the proxy time to establish
 # Need this to still be able to access Terraform remote state.
 # Otherwise Terraform would error saying it could connect to remote backend
 export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com"
+
+export https_proxy=http://127.0.0.1:1234
+
 # install Tiller in the cluster
-https_proxy=http://127.0.0.1:1234 terraform apply -var-file=$1 --target=module.system_components
+terraform apply -var-file=$1 --target=module.system_components
 
 # install astronomer in the cluster
-https_proxy=http://127.0.0.1:1234 terraform apply -var-file=$1 --target=module.astronomer
+terraform apply -var-file=$1 --target=module.astronomer
+
+# Clear Proxy Variables
+unset no_proxy https_proxy
