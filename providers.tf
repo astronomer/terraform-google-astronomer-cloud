@@ -7,7 +7,9 @@ provider "google" {
 
 provider "google-beta" {
   # TODO: after GKE sandbox supported by
-  # provider google-beta
+  # provider google-beta. This will be supported in 2.10.0
+  # https://github.com/terraform-providers/terraform-provider-google-beta/blob/master/CHANGELOG.md#2100-unreleased
+  # https://github.com/terraform-providers/terraform-provider-google-beta/commit/b7c9a8d812fca32771692831f55f3124f5a2fd9e
   # until now, we are using a local,
   # re-compiled binary
   # version = "~> 2.9.1"
