@@ -12,6 +12,6 @@ apply:
 
 destroy:
 	export https_proxy=http://127.0.0.1:1234
-    export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com,github.com,.github.com"
-    terraform destroy -var-file=terraform.tfvars
-    unset no_proxy https_proxy
+	export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com,github.com,.github.com"
+	terraform destroy -var-file=terraform.tfvars
+	unset no_proxy https_proxy
