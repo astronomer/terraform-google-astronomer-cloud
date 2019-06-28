@@ -6,11 +6,11 @@ Requires Terraform 0.12+
 
 This repo uses the following Terraform modules:
 
-| Module                                                                                                                                               | Version |
-|------------------------------------------------------------------------------------------------------------------------------------------------------|---------|
-| [astronomer/astronomer-gcp/google](https://registry.terraform.io/modules/astronomer/astronomer-gcp/google/0.2.3)                                     | 0.2.3   |
-| [astronomer/astronomer-system-components/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer-system-components/kubernetes/0.0.3) | 0.0.3   |
-| [astronomer/astronomer/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer/kubernetes/1.0.2)                                     | 1.0.2   |
+| Module                                                                                                                               | Version |
+|--------------------------------------------------------------------------------------------------------------------------------------|---------|
+| [astronomer/astronomer-gcp/google](https://registry.terraform.io/modules/astronomer/astronomer-gcp/)                                 | 0.2.4   |
+| [astronomer/astronomer-system-components/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer-system-components/) | 0.0.3   |
+| [astronomer/astronomer/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer/)                                     | 1.0.2   |
 
 These modules are downloaded from Terraform Registry into a local `.terraform` directory.
 

@@ -1,6 +1,6 @@
 module "gcp" {
   source           = "astronomer/astronomer-gcp/google"
-  version          = "0.2.3"
+  version          = "0.2.4"
   admin_emails     = [var.email]
   deployment_id    = var.deployment_id
   dns_managed_zone = var.dns_managed_zone
