@@ -1,5 +1,5 @@
 provider "google" {
-  version = "~> 2.7"
+  version = "~> 2.9.1"
   region  = var.region
   project = var.project
   zone    = var.zone
@@ -10,7 +10,7 @@ provider "google-beta" {
   # provider google-beta
   # until now, we are using a local,
   # re-compiled binary
-  # version = "~> 2.7"
+  # version = "~> 2.9.1"
   region  = var.region
   project = var.project
   zone    = var.zone
