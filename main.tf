@@ -22,7 +22,9 @@ module "astronomer" {
   tls_key               = module.gcp.tls_key
   private_load_balancer = false
   # indicates which kind of LB to use for Nginx
-  cluster_type  = "public"
-  enable_istio  = "true"
-  enable_gvisor = "true"
+  cluster_type                    = "public"
+  enable_istio                    = "true"
+  enable_gvisor                   = "true"
+  gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
+  container_registry_bucket_name  = module.gcp.container_registry_bucket_name
 }
