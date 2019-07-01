@@ -15,7 +15,7 @@ module "system_components" {
 
 module "astronomer" {
   source                = "astronomer/astronomer/kubernetes"
-  version               = "1.0.2"
+  version               = "1.0.3"
   base_domain           = module.gcp.base_domain
   db_connection_string  = module.gcp.db_connection_string
   tls_cert              = module.gcp.tls_cert
