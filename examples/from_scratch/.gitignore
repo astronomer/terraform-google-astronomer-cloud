@@ -1,3 +1,4 @@
 backend.tf
 providers.tf
 kubeconfig*
+errored.tfstate
