@@ -1,7 +1,3 @@
-variable "project" {
-  type = string
-}
-
 variable "dns_managed_zone" {
   type = string
 }
@@ -16,20 +12,15 @@ variable "deployment_id" {
 
 variable "enable_istio" {
   default = true
+  type    = bool
 }
 
-variable "region" {
-  default = "us-east4"
+variable "zonal_cluster" {
+  default = false
+  type    = bool
+}
+
+variable "management_api" {
+  default = "private"
   type    = string
 }
-
-variable "zone" {
-  default = "us-east4-a"
-  type    = string
-}
-
-variable "acme_server" {
-  default = "https://acme-v02.api.letsencrypt.org/directory"
-  type    = string
-}
-
