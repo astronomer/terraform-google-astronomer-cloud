@@ -1,6 +1,6 @@
 module "gcp" {
   source  = "astronomer/astronomer-gcp/google"
-  version = "1.0.15"
+  version = "1.0.16"
   # source              = "../terraform-google-astronomer-gcp"
   email               = var.email
   deployment_id       = var.deployment_id
