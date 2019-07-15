@@ -1,6 +1,6 @@
 module "gcp" {
-  source              = "astronomer/astronomer-gcp/google"
-  version             = "1.0.15"
+  source  = "astronomer/astronomer-gcp/google"
+  version = "1.0.16"
   # source              = "../terraform-google-astronomer-gcp"
   email               = var.email
   deployment_id       = var.deployment_id
@@ -29,8 +29,10 @@ module "astronomer" {
   tls_cert             = module.gcp.tls_cert
   tls_key              = module.gcp.tls_key
 
-  cluster_type          = "public"
-  private_load_balancer = false
-  enable_istio          = "true"
-  enable_gvisor         = "true"
+  cluster_type                    = "public"
+  private_load_balancer           = false
+  enable_istio                    = "true"
+  enable_gvisor                   = "true"
+  gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
+  container_registry_bucket_name  = module.gcp.container_registry_bucket_name
 }
