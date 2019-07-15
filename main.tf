@@ -1,7 +1,7 @@
 module "gcp" {
   source              = "astronomer/astronomer-gcp/google"
-  version             = "1.0.15"
-  # source              = "../terraform-google-astronomer-gcp"
+  version             = "1.0.16"
+  #  source              = "../terraform-google-astronomer-gcp"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
@@ -14,20 +14,21 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  # version      = "0.0.8"
+  version      = "0.1.0"
   enable_istio = true
 }
 
 module "astronomer" {
   dependencies = [module.system_components.depended_on]
   source       = "astronomer/astronomer/kubernetes"
-  # version            = "1.0.8"
+  version            = "1.1.17"
   astronomer_version = "0.10.0-alpha.1"
 
   base_domain          = module.gcp.base_domain
   db_connection_string = module.gcp.db_connection_string
   tls_cert             = module.gcp.tls_cert
   tls_key              = module.gcp.tls_key
+  load_balancer_ip     = module.gcp.load_balancer_ip
 
   cluster_type          = "public"
   private_load_balancer = false
