@@ -1,8 +1,6 @@
 variable "deployment_id" {}
 
-variable "zonal" {
-  default = true
-}
+variable "zonal" {}
 
 module "astronomer_cloud" {
   source           = "../.."
