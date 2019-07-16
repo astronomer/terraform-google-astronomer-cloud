@@ -39,55 +39,133 @@ steps:
       - pull_request
       - push
 
-# There is an issue where the cluster decides to update right after
-# deploying, and it interrupts the K8 api, so the pipeline doesn't
-# work out of the gate right now.
+- name: from_scratch
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+  commands:
+    - EXAMPLE=from_scratch pipeline/run_terraform.sh
+  when:
+    event:
+      - push
+    branch:
+      - master
 
-# - name: from_scratch
-#   image: sjmiller609/helm-kubectl-terraform:latest
-#   environment:
-#     GOOGLE_CREDENTIAL_FILE_CONTENT:
-#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
-#   commands:
-#     - EXAMPLE=from_scratch pipeline/run_terraform.sh
-#   when:
-#     event:
-#       - push
-#     branch:
-#       - master
-# 
-# - name: from_scratch_cleanup
-#   image: sjmiller609/helm-kubectl-terraform:latest
-#   environment:
-#     GOOGLE_CREDENTIAL_FILE_CONTENT:
-#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
-#   commands:
-#     - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
-#   when:
-#     event:
-#       - push
-#     status:
-#       - failure
-#       - success
-#     branch:
-#       - master
-# 
-# # temporary workaround to the cluster going into a
-# # 'reconciling' state for a long time after initial
-# # deployment, causing the cleanup to fail
-# - name: wait_then_try_cleanup_again
-#   image: sjmiller609/helm-kubectl-terraform:latest
-#   environment:
-#     GOOGLE_CREDENTIAL_FILE_CONTENT:
-#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
-#   commands:
-#     - echo 'sleeping 10 minutes'
-#     - sleep 600
-#     - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
-#   when:
-#     event:
-#       - push
-#     branch:
-#       - master
-#     status:
-#       - failure
+# TODO: expand testing
+- name: test
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+  commands:
+    - EXAMPLE=from_scratch pipeline/run_test.sh
+  when:
+    event:
+      - push
+    branch:
+      - master
+
+- name: from_scratch_cleanup
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+  commands:
+    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+  when:
+    event:
+      - push
+    status:
+      - failure
+      - success
+    branch:
+      - master
+
+# It helps to try the cleanup again if it fails
+# for some reason the first time.
+# A tagged release will not happen if the destroy
+# fails the first time.
+- name: wait_then_try_cleanup_again
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+  commands:
+    - echo 'sleeping 10 minutes'
+    - sleep 600
+    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+  when:
+    event:
+      - push
+    branch:
+      - master
+    status:
+      - failure
+
+- name: git_tag
+  image: docker:git
+  environment:
+    DEPLOY_KEY:
+      from_secret: DEPLOY_KEY
+  commands:
+    - eval `ssh-agent`
+    - echo "$DEPLOY_KEY" | ssh-add -
+    - TAG=0.1.${DRONE_BUILD_NUMBER}
+    - git tag $TAG
+    - mkdir -p $HOME/.ssh
+    - ssh-keyscan -t rsa github.com >> $HOME/.ssh/known_hosts
+    - git push $DRONE_GIT_SSH_URL $DRONE_BRANCH --tags
+  when:
+    event:
+      - push
+    status:
+      - success
+    branch:
+      - master
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: WEBHOOK_URL
+    channel: infrastructure
+    username: terraform-ci
+    template: >
+      {{repo.name}}
+      {{build.link}}
+      {{#success build.status}}
+        succeeded
+      {{else}}
+        failed
+      {{/success}}
+  when:
+    event:
+      - push
+    status:
+      - success
+      - failure
+    branch:
+      - master
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+
+- name: slack_tag
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: WEBHOOK_URL
+    channel: infrastructure
+    username: terraform-ci
+    template: >
+      {{repo.name}}
+      version {{build.tag}} released
+  when:
+    event:
+      - tag
+    status:
+      - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
