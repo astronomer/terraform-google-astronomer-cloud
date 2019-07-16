@@ -30,10 +30,11 @@ steps:
       echo $example
       terraform init
       terraform fmt -check=true
-      terraform validate -var "deployment_id=citest"
+      terraform validate -var "deployment_id=citest" -var "dns_managed_zone=steven-zone"
       cd -
       done
     - terraform -v
+    - rm ~/account.json
   when:
     event:
       - pull_request
@@ -167,5 +168,46 @@ steps:
       - tag
     status:
       - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+
+- name: deploy_to_staging
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
+  commands:
+    - pipeline/release_stage_cloud.sh
+  when:
+    event:
+      - tag
+    status:
+      - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+
+- name: slack_staging
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: WEBHOOK_URL
+    channel: infrastructure
+    username: terraform-ci
+    template: >
+      {{repo.name}}
+      {{#success build.status}}
+      deployment of version {{build.tag}} to stage cloud succeeded! :sunglasses:
+      https://app.staging.astronomer-staging.com
+      {{else}}
+      deployment of version {{build.tag}} to stage cloud
+      ERROR: pipeline failed!
+      build link: {{build.link}}
+      {{/success}}
+  when:
+    event:
+      - tag
+    status:
+      - success
+      - failure
     repo:
       - astronomer/terraform-google-astronomer-cloud

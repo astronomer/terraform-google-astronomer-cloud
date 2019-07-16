@@ -22,10 +22,20 @@ fi
 
 echo $DEPLOYMENT_ID
 
-cp providers.tf.example examples/$EXAMPLE/providers.tf
-cp backend.tf.example examples/$EXAMPLE/backend.tf
+mv providers.tf.example examples/$EXAMPLE/providers.tf
+mv backend.tf.example examples/$EXAMPLE/backend.tf
 cd examples/$EXAMPLE
+
 sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
+sed -i "s/BUCKET/cloud2-dev-terraform/g" backend.tf
+sed -i "s/PROJECT/astronomer-cloud-dev-236021/g" providers.tf
+
+cat providers.tf
+cat backend.tf
+
+if [ -d ./.terraform ]; then
+  rm -rf .terraform
+fi
 
 terraform init
 
@@ -33,8 +43,8 @@ if [ $DESTROY -eq 1 ]; then
     # this resource should be ignored on destroy
     # remove it from the state to accomplish this
     terraform state rm module.astronomer_cloud.module.gcp.google_sql_user.airflow
-    terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false -refresh=false
+    terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 else
-    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false --target=module.astronomer_cloud.module.gcp
-    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false -refresh=false
+    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
+    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 fi
