@@ -30,8 +30,11 @@ sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
 terraform init
 
 if [ $DESTROY -eq 1 ]; then
+    # this resource should be ignored on destroy
+    # remove it from the state to accomplish this
+    terraform state rm module.astronomer_cloud.module.gcp.google_sql_user.airflow
     terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false -refresh=false
 else
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false --target=module.astronomer_cloud.module.gcp
-    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false
+    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false -refresh=false
 fi
