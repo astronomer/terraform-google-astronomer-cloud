@@ -23,17 +23,22 @@ steps:
       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/[SERVICE-ACCOUNT-EMAIL]"
       }' > ~/account.json
     - terraform validate -var "deployment_id=validate" -var "dns_managed_zone=validate-fake.com" -var "email=fake@mailinator.com"
+    - rm -rf .terraform
     - |
       for example in $(find examples -maxdepth 1 -mindepth 1 -type d); do
-      cp providers.tf $example
+      cp providers.tf.example $example/providers.tf
       cd $example
       echo $example
       terraform init
       terraform fmt -check=true
-      terraform validate -var "deployment_id=citest"
+      terraform validate -var "deployment_id=citest" -var "dns_managed_zone=steven-zone"
+      rm providers.tf
+      rm -rf .terraform
       cd -
       done
     - terraform -v
+    - rm providers.tf
+    - rm ~/account.json
   when:
     event:
       - pull_request
@@ -167,5 +172,46 @@ steps:
       - tag
     status:
       - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+
+- name: deploy_to_staging
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
+  commands:
+    - pipeline/release_stage_cloud.sh
+  when:
+    event:
+      - tag
+    status:
+      - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+
+- name: slack_staging
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: WEBHOOK_URL
+    channel: infrastructure
+    username: terraform-ci
+    template: >
+      {{repo.name}}
+      {{#success build.status}}
+      deployment of version {{build.tag}} to stage cloud succeeded! :sunglasses:
+      https://app.staging.astronomer-staging.com
+      {{else}}
+      deployment of version {{build.tag}} to stage cloud
+      ERROR: pipeline failed!
+      build link: {{build.link}}
+      {{/success}}
+  when:
+    event:
+      - tag
+    status:
+      - success
+      - failure
     repo:
       - astronomer/terraform-google-astronomer-cloud
