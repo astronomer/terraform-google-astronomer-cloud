@@ -38,6 +38,6 @@ module "astronomer" {
   private_load_balancer           = false
   enable_istio                    = "true"
   enable_gvisor                   = "true"
-  gcp_default_service_account_key = "${join("", [module.gcp.gcp_default_service_account_key])}"
+  gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
   container_registry_bucket_name  = module.gcp.container_registry_bucket_name
 }

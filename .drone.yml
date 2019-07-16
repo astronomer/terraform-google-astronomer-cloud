@@ -53,7 +53,7 @@ steps:
       - master
 
 # TODO: expand testing
-- name: test
+- name: system_test
   image: sjmiller609/helm-kubectl-terraform:latest
   environment:
     GOOGLE_CREDENTIAL_FILE_CONTENT:

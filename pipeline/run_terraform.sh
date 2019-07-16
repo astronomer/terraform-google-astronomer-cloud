@@ -32,5 +32,6 @@ terraform init
 if [ $DESTROY -eq 1 ]; then
     terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false -refresh=false
 else
+    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false --target=module.astronomer_cloud.module.gcp
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -lock=false
 fi
