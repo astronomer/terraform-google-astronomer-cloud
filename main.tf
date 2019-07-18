@@ -28,7 +28,7 @@ module "system_components" {
 module "astronomer" {
   dependencies       = [module.system_components.depended_on]
   source             = "astronomer/astronomer/kubernetes"
-  version            = "1.1.17"
+  version            = "1.1.18"
   astronomer_version = "0.10.0-alpha.3"
 
   db_connection_string = module.gcp.db_connection_string
