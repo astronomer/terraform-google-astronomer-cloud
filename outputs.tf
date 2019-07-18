@@ -3,5 +3,5 @@ output "bastion_proxy_command" {
 }
 
 output "application_url" {
-  value = "https://app.${var.base_domain}/"
+  value = "https://app.${module.gcp.base_domain}/"
 }
