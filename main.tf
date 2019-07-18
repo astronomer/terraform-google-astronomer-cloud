@@ -31,16 +31,12 @@ module "astronomer" {
   version            = "1.1.17"
   astronomer_version = "0.10.0-alpha.3"
 
-  base_domain          = module.gcp.base_domain
   db_connection_string = module.gcp.db_connection_string
   tls_cert             = module.gcp.tls_cert
   tls_key              = module.gcp.tls_key
-  load_balancer_ip     = module.gcp.load_balancer_ip
 
-  cluster_type                    = "public"
   private_load_balancer           = false
-  enable_istio                    = "true"
-  enable_gvisor                   = "true"
   gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
-  container_registry_bucket_name  = module.gcp.container_registry_bucket_name
+
+  astronomer_helm_values = local.astronomer_helm_values
 }

@@ -24,3 +24,28 @@ variable "management_api" {
   default = "private"
   type    = string
 }
+
+variable "base_domain" {
+  type        = string
+  description = "<var.deployment_id>.<var.route53_domain>"
+}
+
+variable "enable_gvisor" {
+  default = "false"
+  type    = string
+}
+
+variable "cluster_type" {
+  default = "private"
+  type    = string
+}
+
+variable "smtp_uri" {
+  default = ""
+  type    = string
+}
+
+variable "container_registry_bucket_name" {
+  default = ""
+  type    = string
+}
