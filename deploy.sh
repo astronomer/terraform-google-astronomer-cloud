@@ -36,7 +36,7 @@ sleep 5 # give the proxy time to establish
 
 # Need this to still be able to access Terraform remote state.
 # Otherwise Terraform would error saying it could connect to remote backend
-export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com"
+export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com,.acme-v02.api.letsencrypt.org,acme-v02.api.letsencrypt.org"
 
 export https_proxy=http://127.0.0.1:1234
 
