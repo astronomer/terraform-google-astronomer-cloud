@@ -5,9 +5,9 @@ global:
   # Base domain for all subdomains exposed through ingress
   baseDomain: ${module.gcp.base_domain}
   tlsSecret: astronomer-tls
-  istioEnabled: ${var.enable_istio == "true" ? true : false}
+  istioEnabled: ${var.enable_istio == true ? true : false}
 
-%{if var.enable_gvisor == "true"}
+%{if var.enable_gvisor == true}
   platformNodePool:
     affinity:
       nodeAffinity:
@@ -42,7 +42,7 @@ nginx:
   perserveSourceIP: true
 
 astronomer:
-%{if var.enable_gvisor == "true"}
+%{if var.enable_gvisor == true}
   houston:
     config:
     %{if var.smtp_uri != ""}

@@ -28,10 +28,12 @@ variable "management_api" {
 variable "enable_gvisor" {
   default = "false"
   type    = string
+  default = true
+  type    = bool
 }
 
 variable "cluster_type" {
-  default = "private"
+  default = "public"
   type    = string
 }
 

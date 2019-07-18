@@ -35,7 +35,6 @@ module "astronomer" {
   tls_cert             = module.gcp.tls_cert
   tls_key              = module.gcp.tls_key
 
-  private_load_balancer           = false
   gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
 
   astronomer_helm_values = local.astronomer_helm_values
