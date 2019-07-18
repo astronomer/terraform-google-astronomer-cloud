@@ -3,7 +3,7 @@ locals {
 ---
 global:
   # Base domain for all subdomains exposed through ingress
-  baseDomain: ${var.base_domain}
+  baseDomain: ${module.gcp.base_domain}
   tlsSecret: astronomer-tls
   istioEnabled: ${var.enable_istio == "true" ? true : false}
 

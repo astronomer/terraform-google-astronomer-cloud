@@ -25,11 +25,6 @@ variable "management_api" {
   type    = string
 }
 
-variable "base_domain" {
-  type        = string
-  description = "<var.deployment_id>.<var.route53_domain>"
-}
-
 variable "enable_gvisor" {
   default = "false"
   type    = string
