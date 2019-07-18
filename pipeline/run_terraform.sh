@@ -22,8 +22,8 @@ fi
 
 echo $DEPLOYMENT_ID
 
-cp providers.tf.example examples/$EXAMPLE/providers.tf
-cp backend.tf.example examples/$EXAMPLE/backend.tf
+mv providers.tf.example examples/$EXAMPLE/providers.tf
+mv backend.tf.example examples/$EXAMPLE/backend.tf
 cd examples/$EXAMPLE
 
 sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
