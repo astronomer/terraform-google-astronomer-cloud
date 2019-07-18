@@ -71,7 +71,7 @@ astronomer:
   registry:
     gcs:
       enabled: true
-      bucket: ${var.container_registry_bucket_name}
+      bucket: ${module.gcp.container_registry_bucket_name}
 %{endif}  
 
 EOF

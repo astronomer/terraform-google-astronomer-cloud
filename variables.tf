@@ -39,8 +39,3 @@ variable "smtp_uri" {
   default = ""
   type    = string
 }
-
-variable "container_registry_bucket_name" {
-  default = ""
-  type    = string
-}
