@@ -27,27 +27,37 @@ sed -i "s/PROJECT/astronomer-cloud-staging/g" providers.tf
 
 terraform init
 
-terraform apply --auto-approve \
-  -var "deployment_id=$DEPLOYMENT_ID" \
-  -var "dns_managed_zone=staging-zone" \
-  -var "zonal=$ZONAL" \
-  -lock=false \
-  --target=module.astronomer_cloud.module.gcp
+if [[ ${TF_PLAN:-0} -eq 1 ]]; then
+	terraform plan -detailed-exitcode \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false
+fi
 
-terraform apply --auto-approve \
-  -var "deployment_id=$DEPLOYMENT_ID" \
-  -var "dns_managed_zone=staging-zone" \
-  -var "zonal=$ZONAL" \
-  -lock=false \
-  -refresh=false \
-  --target=module.astronomer_cloud.local_file.kubeconfig
+if [[ ${TF_APPLY:-0} -eq 1 ]]; then
+	terraform apply --auto-approve \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false \
+	  --target=module.astronomer_cloud.module.gcp
 
-terraform apply --auto-approve \
-  -var "deployment_id=$DEPLOYMENT_ID" \
-  -var "dns_managed_zone=staging-zone" \
-  -var "zonal=$ZONAL" \
-  -lock=false \
-  -refresh=false
+	terraform apply --auto-approve \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false \
+	  -refresh=false \
+	  --target=module.astronomer_cloud.local_file.kubeconfig
+
+	terraform apply --auto-approve \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false \
+	  -refresh=false
+fi
 
 rm providers.tf
 rm backend.tf
