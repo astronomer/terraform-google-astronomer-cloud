@@ -53,22 +53,10 @@ steps:
     - TF_PLAN=1 pipeline/release_stage_cloud.sh
   when:
     event:
-      - pull_request
-
-- name: deploy_to_production
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
-  commands:
-    - echo "works"
-  when:
-    event:
-      - promote
-    target:
-      - production
-    status:
-      - success
+      - push
+      - tag
+    branch:
+      - master
 
 - name: from_scratch
   image: sjmiller609/helm-kubectl-terraform:latest
