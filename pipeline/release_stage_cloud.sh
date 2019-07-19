@@ -39,4 +39,15 @@ terraform apply --auto-approve \
   -var "dns_managed_zone=staging-zone" \
   -var "zonal=$ZONAL" \
   -lock=false \
+  -refresh=false \
+  --target=module.astronomer_cloud.local_file.kubeconfig
+
+terraform apply --auto-approve \
+  -var "deployment_id=$DEPLOYMENT_ID" \
+  -var "dns_managed_zone=staging-zone" \
+  -var "zonal=$ZONAL" \
+  -lock=false \
   -refresh=false
+
+rm providers.tf
+rm backend.tf

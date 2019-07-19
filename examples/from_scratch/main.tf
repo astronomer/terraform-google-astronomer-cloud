@@ -11,4 +11,5 @@ module "astronomer_cloud" {
   email            = "steven@astronomer.io"
   zonal_cluster    = var.zonal
   management_api   = "public"
+  enable_gvisor    = false
 }

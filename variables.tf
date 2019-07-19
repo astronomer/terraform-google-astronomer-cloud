@@ -26,13 +26,8 @@ variable "management_api" {
 }
 
 variable "enable_gvisor" {
-  default = true
+  default = false
   type    = bool
-}
-
-variable "cluster_type" {
-  default = "public"
-  type    = string
 }
 
 variable "smtp_uri" {
