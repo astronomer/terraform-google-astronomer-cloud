@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
   source  = "astronomer/astronomer-gcp/google"
-  version = "1.0.35"
+  version = "1.0.42"
   # source              = "../terraform-google-astronomer-gcp"
   email               = var.email
   deployment_id       = var.deployment_id
@@ -12,6 +12,9 @@ module "gcp" {
   # How long to wait after deploying GKE.
   # This is needed GKE-managed services to stabilize.
   wait_for = "430"
+  # this setting is for how to configure the multi-tenant
+  # node pool
+  enable_gvisor = var.enable_gvisor
 }
 
 # Install tiller, which is the server-side component
@@ -29,7 +32,7 @@ module "astronomer" {
   dependencies       = [module.system_components.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.18"
-  astronomer_version = "0.10.0-alpha.3"
+  astronomer_version = "0.10.0-alpha.4"
 
   db_connection_string = module.gcp.db_connection_string
   tls_cert             = module.gcp.tls_cert

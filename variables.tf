@@ -26,7 +26,7 @@ variable "management_api" {
 }
 
 variable "enable_gvisor" {
-  default = true
+  default = false
   type    = bool
 }
 

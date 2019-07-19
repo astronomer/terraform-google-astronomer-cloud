@@ -4,3 +4,5 @@ kubeconfig*
 errored.tfstate
 deploy.sh
 destroy.sh
+helm.astronomer.io
+helm.astronomer.io*

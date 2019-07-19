@@ -7,7 +7,8 @@ global:
   tlsSecret: astronomer-tls
   istioEnabled: ${var.enable_istio == true ? true : false}
 
-%{if var.enable_gvisor == true}
+  # the platform components go in the non-multi tenant
+  # node pool, regardless of if we are using gvisor or not
   platformNodePool:
     affinity:
       nodeAffinity:
@@ -19,16 +20,20 @@ global:
               values:
               - "false"
 
+  # the deployment components don't get scheduled into the
+  # non-multi-tenant node pool, regardless of if we are
+  # using gvisor or not
   deploymentNodePool:
     affinity:
-      nodeAffinity:
+      nodeAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
           - matchExpressions:
-            - key: "sandbox.gke.io/runtime"
+            - key: "astronomer.io/multi-tenant"
               operator: In
               values:
-              - "gvisor"
+              - "false"
+%{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
       key: sandbox.gke.io/runtime
@@ -38,11 +43,11 @@ global:
 
 nginx:
   loadBalancerIP: ${module.gcp.load_balancer_ip == "" ? "~" : module.gcp.load_balancer_ip}
-  privateLoadBalancer: ${var.cluster_type == "private" ? true : false}
+  # For cloud, the load balancer should be public
+  privateLoadBalancer: false
   perserveSourceIP: true
 
 astronomer:
-%{if var.enable_gvisor == true}
   houston:
     config:
     %{if var.smtp_uri != ""}
@@ -53,19 +58,26 @@ astronomer:
       deployments:
         helm:
           affinity:
-            nodeAffinity:
+            nodeAntiAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
                 - matchExpressions:
-                  - key: "sandbox.gke.io/runtime"
+                  - key: "astronomer.io/multi-tenant"
                     operator: In
                     values:
-                    - "gvisor"
+                    - "false"
+%{if var.enable_gvisor == true}
           tolerations:
           - effect: NoSchedule
             key: sandbox.gke.io/runtime
             operator: Equal
             value: gvisor
+          webserver:
+            runtimeClassName: gvisor
+          scheduler:
+            runtimeClassName: gvisor
+          workers:
+            runtimeClassName: gvisor
 %{endif}
 %{if module.gcp.gcp_default_service_account_key != ""}
   registry:
