@@ -39,10 +39,25 @@ steps:
     - terraform -v
     - rm providers.tf
     - rm ~/account.json
+    - echo "hi" >> abc.txt
   when:
     event:
       - pull_request
       - push
+
+- name: test
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
+  commands:
+    - cat abc.txt
+  when:
+    event:
+      - push
+      - tag
+    branch:
+      - pull_request
 
 - name: terraform_plan
   image: sjmiller609/helm-kubectl-terraform:latest
