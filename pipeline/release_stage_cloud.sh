@@ -28,7 +28,7 @@ sed -i "s/PROJECT/astronomer-cloud-staging/g" providers.tf
 #terraform init
 
 if [[ ${TF_PLAN:-0} -eq 1 ]]; then
-	terraform fmt -check=true
+	terraform fmt
 #	terraform plan -detailed-exitcode \
 #	  -var "deployment_id=$DEPLOYMENT_ID" \
 #	  -var "dns_managed_zone=staging-zone" \
