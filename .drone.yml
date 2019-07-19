@@ -167,6 +167,8 @@ steps:
     template: >
       {{repo.name}}
       version {{build.tag}} released
+      Run: `drone build promote astronomer/terraform-google-astronomer-cloud ${DRONE_BUILD_NUMBER} staging`
+      to run `terraform apply` and roll it to Staging Cluster
   when:
     event:
       - tag
@@ -184,7 +186,6 @@ steps:
     - TF_PLAN=1 pipeline/release_stage_cloud.sh
   when:
     event:
-      - push
       - tag
     branch:
       - master
