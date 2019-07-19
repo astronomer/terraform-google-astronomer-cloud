@@ -48,3 +48,6 @@ terraform apply --auto-approve \
   -var "zonal=$ZONAL" \
   -lock=false \
   -refresh=false
+
+rm providers.tf
+rm backend.tf

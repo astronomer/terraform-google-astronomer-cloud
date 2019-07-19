@@ -22,8 +22,8 @@ fi
 
 echo $DEPLOYMENT_ID
 
-mv providers.tf.example examples/$EXAMPLE/providers.tf
-mv backend.tf.example examples/$EXAMPLE/backend.tf
+cp providers.tf.example examples/$EXAMPLE/providers.tf
+cp backend.tf.example examples/$EXAMPLE/backend.tf
 cd examples/$EXAMPLE
 
 sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
@@ -44,3 +44,6 @@ else
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 fi
+
+rm providers.tf
+rm backend.tf
