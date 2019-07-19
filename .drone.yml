@@ -1,7 +1,16 @@
 kind: pipeline
 name: terraform-google-astronomer-cloud
 
+clone:
+  disable: true
+
 steps:
+
+- name: clone
+  image: docker:git
+  commands:
+  - git clone https://github.com/astronomer/terraform-google-astronomer-cloud
+  - git checkout $DRONE_COMMIT
 
 - name: lint
   image: hashicorp/terraform:light
