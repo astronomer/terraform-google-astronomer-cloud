@@ -39,7 +39,6 @@ steps:
     - terraform -v
     - rm providers.tf
     - rm ~/account.json
-    - echo "hi" >> abc.txt
   when:
     event:
       - pull_request
