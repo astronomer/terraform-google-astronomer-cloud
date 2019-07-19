@@ -210,11 +210,13 @@ steps:
     - pipeline/release_stage_cloud.sh
   when:
     event:
-      - tag
+      - promote
     status:
       - success
     repo:
       - astronomer/terraform-google-astronomer-cloud
+    target:
+      - staging
 
 - name: slack_staging
   image: plugins/slack
@@ -235,9 +237,11 @@ steps:
       {{/success}}
   when:
     event:
-      - tag
+      - promote
     status:
       - success
       - failure
     repo:
       - astronomer/terraform-google-astronomer-cloud
+    target:
+      - staging

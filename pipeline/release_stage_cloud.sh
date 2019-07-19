@@ -25,15 +25,14 @@ sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
 sed -i "s/BUCKET/astronomer-staging-terraform-state/g" backend.tf
 sed -i "s/PROJECT/astronomer-cloud-staging/g" providers.tf
 
-#terraform init
+terraform init
 
 if [[ ${TF_PLAN:-0} -eq 1 ]]; then
-	terraform fmt
-#	terraform plan -detailed-exitcode \
-#	  -var "deployment_id=$DEPLOYMENT_ID" \
-#	  -var "dns_managed_zone=staging-zone" \
-#	  -var "zonal=$ZONAL" \
-#	  -lock=false
+	terraform plan -detailed-exitcode \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false
 fi
 
 if [[ ${TF_APPLY:-0} -eq 1 ]]; then
