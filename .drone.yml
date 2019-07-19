@@ -54,10 +54,8 @@ steps:
     - cat abc.txt
   when:
     event:
-      - push
-      - tag
-    branch:
       - pull_request
+      - tag
 
 - name: terraform_plan
   image: sjmiller609/helm-kubectl-terraform:latest
