@@ -45,32 +45,6 @@ steps:
       - pull_request
       - push
 
-- name: test
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
-  commands:
-    - cat abc.txt
-  when:
-    event:
-      - pull_request
-      - tag
-
-- name: terraform_plan
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
-  commands:
-    - TF_PLAN=1 pipeline/release_stage_cloud.sh
-  when:
-    event:
-      - push
-      - tag
-    branch:
-      - master
-
 - name: from_scratch
   image: sjmiller609/helm-kubectl-terraform:latest
   environment:
@@ -202,13 +176,27 @@ steps:
     repo:
       - astronomer/terraform-google-astronomer-cloud
 
+- name: terraform_plan
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
+  commands:
+    - TF_PLAN=1 pipeline/release_stage_cloud.sh
+  when:
+    event:
+      - push
+      - tag
+    branch:
+      - master
+
 - name: deploy_to_staging
   image: sjmiller609/helm-kubectl-terraform:latest
   environment:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
   commands:
-    - pipeline/release_stage_cloud.sh
+    - TF_APPLY=1 pipeline/release_stage_cloud.sh
   when:
     event:
       - promote

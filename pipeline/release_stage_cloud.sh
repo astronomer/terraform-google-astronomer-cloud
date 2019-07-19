@@ -7,6 +7,7 @@ set -xe
 ls /tmp | grep account
 
 export GOOGLE_APPLICATION_CREDENTIALS='/tmp/account.json'
+export TF_IN_AUTOMATION=true
 
 terraform -v
 
@@ -32,7 +33,9 @@ if [[ ${TF_PLAN:-0} -eq 1 ]]; then
 	  -var "deployment_id=$DEPLOYMENT_ID" \
 	  -var "dns_managed_zone=staging-zone" \
 	  -var "zonal=$ZONAL" \
-	  -lock=false
+	  -lock=false \
+	  -out=tfplan \
+	  -input=false
 fi
 
 if [[ ${TF_APPLY:-0} -eq 1 ]]; then
@@ -41,22 +44,8 @@ if [[ ${TF_APPLY:-0} -eq 1 ]]; then
 	  -var "dns_managed_zone=staging-zone" \
 	  -var "zonal=$ZONAL" \
 	  -lock=false \
-	  --target=module.astronomer_cloud.module.gcp
-
-	terraform apply --auto-approve \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-	  -lock=false \
 	  -refresh=false \
-	  --target=module.astronomer_cloud.local_file.kubeconfig
-
-	terraform apply --auto-approve \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-	  -lock=false \
-	  -refresh=false
+	  -input=false tfplan
 fi
 
 rm providers.tf
