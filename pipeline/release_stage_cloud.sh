@@ -25,7 +25,7 @@ sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
 sed -i "s/BUCKET/astronomer-staging-terraform-state/g" backend.tf
 sed -i "s/PROJECT/astronomer-cloud-staging/g" providers.tf
 
-terraform init
+#terraform init
 
 if [[ ${TF_PLAN:-0} -eq 1 ]]; then
 	terraform fmt -check=true
