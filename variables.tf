@@ -30,11 +30,6 @@ variable "enable_gvisor" {
   type    = bool
 }
 
-variable "cluster_type" {
-  default = "public"
-  type    = string
-}
-
 variable "smtp_uri" {
   default = ""
   type    = string
