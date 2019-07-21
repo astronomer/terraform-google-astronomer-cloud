@@ -177,7 +177,7 @@ steps:
     repo:
       - astronomer/terraform-google-astronomer-cloud
 
-- name: terraform_plan
+- name: terraform_plan_staging_deployment
   image: sjmiller609/helm-kubectl-terraform:latest
   environment:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
@@ -187,8 +187,10 @@ steps:
   when:
     event:
       - tag
-    branch:
-      - master
+    status:
+      - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
 
 - name: deploy_to_staging
   image: sjmiller609/helm-kubectl-terraform:latest
