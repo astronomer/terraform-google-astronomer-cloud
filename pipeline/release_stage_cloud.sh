@@ -28,25 +28,20 @@ sed -i "s/PROJECT/astronomer-cloud-staging/g" providers.tf
 
 terraform init
 
-if [[ ${TF_PLAN:-0} -eq 1 ]]; then
-	terraform plan -detailed-exitcode \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-	  -lock=false \
-	  -out=tfplan \
-	  -input=false
-fi
+# TODO: add to CI image
+apk add jq
 
-if [[ ${TF_APPLY:-0} -eq 1 ]]; then
-	terraform apply --auto-approve \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-	  -lock=false \
-	  -refresh=false \
-	  -input=false tfplan
-fi
+# copy the kubeconfig from the terraform state
+terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
+chmod 755 kubeconfig
+
+terraform apply --auto-approve \
+  -var "deployment_id=$DEPLOYMENT_ID" \
+  -var "dns_managed_zone=staging-zone" \
+  -var "zonal=$ZONAL" \
+  -var "kubeconfig_path=./kubeconfig" \
+  -lock=false \
+  -input=false
 
 rm providers.tf
 rm backend.tf
