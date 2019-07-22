@@ -28,24 +28,68 @@ sed -i "s/PROJECT/astronomer-cloud-staging/g" providers.tf
 
 terraform init
 
-if [[ ${TF_PLAN:-0} -eq 1 ]]; then
+if [[ ${TF_PLAN_MODULE_GCP:-0} -eq 1 ]]; then
 	terraform plan -detailed-exitcode \
 	  -var "deployment_id=$DEPLOYMENT_ID" \
 	  -var "dns_managed_zone=staging-zone" \
 	  -var "zonal=$ZONAL" \
 	  -lock=false \
-	  -out=tfplan \
+	  -target=module.astronomer_cloud.module.gcp \
+	  -out=tfplan_module_gcp \
 	  -input=false
 fi
 
-if [[ ${TF_APPLY:-0} -eq 1 ]]; then
+if [[ ${TF_APPLY_MODULE_GCP:-0} -eq 1 ]]; then
+	terraform apply --auto-approve \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false \
+	  -target=module.astronomer_cloud.module.gcp \
+	  -input=false tfplan_module_gcp
+fi
+
+if [[ ${TF_PLAN_TARGET_KUBECONFIG:-0} -eq 1 ]]; then
+	terraform plan -detailed-exitcode \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false \
+	  -target=module.astronomer_cloud.local_file.kubeconfig \
+	  -out=tfplan_target_kubeconfig \
+	  -input=false
+fi
+
+
+if [[ ${TF_APPLY_TARGET_KUBECONFIG:-0} -eq 1 ]]; then
 	terraform apply --auto-approve \
 	  -var "deployment_id=$DEPLOYMENT_ID" \
 	  -var "dns_managed_zone=staging-zone" \
 	  -var "zonal=$ZONAL" \
 	  -lock=false \
 	  -refresh=false \
-	  -input=false tfplan
+	  -target=module.astronomer_cloud.local_file.kubeconfig \
+	  -input=false tfplan_target_kubeconfig
+fi
+
+if [[ ${TF_PLAN_FINAL:-0} -eq 1 ]]; then
+	terraform plan -detailed-exitcode \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false \
+	  -out=tfplan_final \
+	  -input=false
+fi
+
+if [[ ${TF_APPLY_FINAL:-0} -eq 1 ]]; then
+	terraform apply --auto-approve \
+	  -var "deployment_id=$DEPLOYMENT_ID" \
+	  -var "dns_managed_zone=staging-zone" \
+	  -var "zonal=$ZONAL" \
+	  -lock=false \
+	  -refresh=false \
+	  -input=false tfplan_final
 fi
 
 rm providers.tf
