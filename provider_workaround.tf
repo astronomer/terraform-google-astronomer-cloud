@@ -5,7 +5,7 @@
 resource "local_file" "kubeconfig" {
   depends_on = [module.gcp]
   content    = module.gcp.kubeconfig
-  filename   = "${path.root}/kubeconfig"
+  filename   = "./kubeconfig"
 }
 
 provider "kubernetes" {
