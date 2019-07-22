@@ -15,6 +15,7 @@ terraform -v
 # needs to be 32 characters or less and start with letter
 DEPLOYMENT_ID='staging'
 ZONAL='false'
+PROJECT='astronomer-cloud-staging'
 
 export EXAMPLE='from_scratch'
 
@@ -24,29 +25,50 @@ cp backend.tf.example examples/$EXAMPLE/backend.tf
 cd examples/$EXAMPLE
 sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
 sed -i "s/BUCKET/astronomer-staging-terraform-state/g" backend.tf
-sed -i "s/PROJECT/astronomer-cloud-staging/g" providers.tf
+sed -i "s/PROJECT/$PROJECT/g" providers.tf
 
 terraform init
 
-if [[ ${TF_PLAN:-0} -eq 1 ]]; then
-	terraform plan -detailed-exitcode \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-	  -lock=false \
-	  -out=tfplan \
-	  -input=false
-fi
+# TODO: add to CI image
+apk add --update  python  curl  which  bash jq
+curl -sSL https://sdk.cloud.google.com > /tmp/gcl
+bash /tmp/gcl --install-dir=~/gcloud --disable-prompts > /dev/null 2>&1
+PATH=$PATH:/root/gcloud/google-cloud-sdk/bin
 
-if [[ ${TF_APPLY:-0} -eq 1 ]]; then
-	terraform apply --auto-approve \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-	  -lock=false \
-	  -refresh=false \
-	  -input=false tfplan
-fi
+# Set up gcloud CLI
+gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+gcloud config set project $PROJECT
+
+# whitelist our current IP for kube management API
+gcloud container clusters update $DEPLOYMENT_ID-cluster --enable-master-authorized-networks --master-authorized-networks="$(curl icanhazip.com)/32" --zone=us-east4
+
+# terraform apply \
+#   --auto-approve \
+#   -var "deployment_id=$DEPLOYMENT_ID" \
+#   -var "dns_managed_zone=staging-zone" \
+#   -var "zonal=$ZONAL" \
+#   -lock=false \
+#   -input=false \
+#   --target=module.astronomer_cloud.local_file.kubeconfig
+
+# terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud.module.gcp") | select(.type == "local_file") | select(.name == "kubeconfig") | .instances[0].attributes.sensitive_content' > kubeconfig
+
+# have terraform clone the helm chart
+terraform state rm module.astronomer_cloud.module.astronomer.null_resource.helm_repo
+
+# copy the kubeconfig from the terraform state
+terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
+chmod 755 kubeconfig
+
+ls -ltra
+
+terraform apply --auto-approve \
+  -var "deployment_id=$DEPLOYMENT_ID" \
+  -var "dns_managed_zone=staging-zone" \
+  -var "zonal=$ZONAL" \
+  -var "kubeconfig_path=$(pwd)/kubeconfig" \
+  -lock=false \
+  -input=false
 
 rm providers.tf
 rm backend.tf
