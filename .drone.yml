@@ -6,39 +6,40 @@ steps:
 - name: lint
   image: hashicorp/terraform:light
   commands:
-    - cp providers.tf.example providers.tf
-    - terraform init
-    - terraform fmt -check=true
-    - |
-      echo '{
-      "type": "service_account",
-      "project_id": "[PROJECT-ID]",
-      "private_key_id": "[KEY-ID]",
-      "private_key": "-----BEGIN PRIVATE KEY-----\n[PRIVATE-KEY]\n-----END PRIVATE KEY-----\n",
-      "client_email": "[SERVICE-ACCOUNT-EMAIL]",
-      "client_id": "[CLIENT-ID]",
-      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-      "token_uri": "https://accounts.google.com/o/oauth2/token",
-      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/[SERVICE-ACCOUNT-EMAIL]"
-      }' > ~/account.json
-    - terraform validate -var "deployment_id=validate" -var "dns_managed_zone=validate-fake.com" -var "email=fake@mailinator.com"
-    - rm -rf .terraform
-    - |
-      for example in $(find examples -maxdepth 1 -mindepth 1 -type d); do
-      cp providers.tf.example $example/providers.tf
-      cd $example
-      echo $example
-      terraform init
-      terraform fmt -check=true
-      terraform validate -var "deployment_id=citest" -var "dns_managed_zone=steven-zone"
-      rm providers.tf
-      rm -rf .terraform
-      cd -
-      done
-    - terraform -v
-    - rm providers.tf
-    - rm ~/account.json
+    - echo 'skip'
+    # - cp providers.tf.example providers.tf
+    # - terraform init
+    # - terraform fmt -check=true
+    # - |
+    #   echo '{
+    #   "type": "service_account",
+    #   "project_id": "[PROJECT-ID]",
+    #   "private_key_id": "[KEY-ID]",
+    #   "private_key": "-----BEGIN PRIVATE KEY-----\n[PRIVATE-KEY]\n-----END PRIVATE KEY-----\n",
+    #   "client_email": "[SERVICE-ACCOUNT-EMAIL]",
+    #   "client_id": "[CLIENT-ID]",
+    #   "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    #   "token_uri": "https://accounts.google.com/o/oauth2/token",
+    #   "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    #   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/[SERVICE-ACCOUNT-EMAIL]"
+    #   }' > ~/account.json
+    # - terraform validate -var "deployment_id=validate" -var "dns_managed_zone=validate-fake.com" -var "email=fake@mailinator.com"
+    # - rm -rf .terraform
+    # - |
+    #   for example in $(find examples -maxdepth 1 -mindepth 1 -type d); do
+    #   cp providers.tf.example $example/providers.tf
+    #   cd $example
+    #   echo $example
+    #   terraform init
+    #   terraform fmt -check=true
+    #   terraform validate -var "deployment_id=citest" -var "dns_managed_zone=steven-zone"
+    #   rm providers.tf
+    #   rm -rf .terraform
+    #   cd -
+    #   done
+    # - terraform -v
+    # - rm providers.tf
+    # - rm ~/account.json
   when:
     event:
       - pull_request
@@ -50,7 +51,8 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    - EXAMPLE=from_scratch pipeline/run_terraform.sh
+    # - EXAMPLE=from_scratch pipeline/run_terraform.sh
+    - echo "skip"
   when:
     event:
       - push
@@ -64,7 +66,8 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    - EXAMPLE=from_scratch pipeline/run_test.sh
+    # - EXAMPLE=from_scratch pipeline/run_test.sh
+    - echo "skip"
   when:
     event:
       - push
@@ -77,7 +80,8 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+    # - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+    - echo "skip"
   when:
     event:
       - push
@@ -97,9 +101,10 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    - echo 'sleeping 10 minutes'
-    - sleep 600
-    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+    - echo "skip"
+    # - echo 'sleeping 10 minutes'
+    # - sleep 600
+    # - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
   when:
     event:
       - push
@@ -131,12 +136,12 @@ steps:
     repo:
       - astronomer/terraform-google-astronomer-cloud
 
-- name: slack
+- name: notify_build_success
   image: plugins/slack
   settings:
     webhook:
       from_secret: WEBHOOK_URL
-    channel: infrastructure
+    channel: ci-debug
     username: terraform-ci
     template: >
       {{repo.name}}
@@ -157,64 +162,27 @@ steps:
     repo:
       - astronomer/terraform-google-astronomer-cloud
 
-- name: slack_tag
-  image: plugins/slack
-  settings:
-    webhook:
-      from_secret: WEBHOOK_URL
-    channel: infrastructure
-    username: terraform-ci
-    template: >
-      {{repo.name}}
-      version {{build.tag}} released
-      Run: `drone build promote astronomer/terraform-google-astronomer-cloud ${DRONE_BUILD_NUMBER} staging`
-      to run `terraform apply` and roll it to Staging Cluster
-  when:
-    event:
-      - tag
-    status:
-      - success
-    repo:
-      - astronomer/terraform-google-astronomer-cloud
-
-- name: terraform_plan_staging_deployment
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
-  commands:
-    - TF_PLAN=1 pipeline/release_stage_cloud.sh
-  when:
-    event:
-      - tag
-    status:
-      - success
-    repo:
-      - astronomer/terraform-google-astronomer-cloud
-
 - name: deploy_to_staging
   image: sjmiller609/helm-kubectl-terraform:latest
   environment:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
   commands:
-    - TF_APPLY=1 pipeline/release_stage_cloud.sh
+    - pipeline/release_stage_cloud.sh
   when:
     event:
-      - promote
+      - tag
     status:
       - success
     repo:
       - astronomer/terraform-google-astronomer-cloud
-    target:
-      - staging
 
-- name: slack_staging
+- name: notify_staging_updated
   image: plugins/slack
   settings:
     webhook:
       from_secret: WEBHOOK_URL
-    channel: infrastructure
+    channel: ci-debug
     username: terraform-ci
     template: >
       {{repo.name}}
@@ -228,11 +196,62 @@ steps:
       {{/success}}
   when:
     event:
-      - promote
+      - tag
     status:
       - success
       - failure
     repo:
       - astronomer/terraform-google-astronomer-cloud
+
+# - name: terraform_plan_production
+#   image: sjmiller609/helm-kubectl-terraform:latest
+#   environment:
+#     GOOGLE_CREDENTIAL_FILE_CONTENT:
+#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
+#   commands:
+#     - TF_PLAN=1 pipeline/release_prod_cloud.sh
+#   when:
+#     event:
+#       - tag
+#     status:
+#       - success
+#     repo:
+#       - astronomer/terraform-google-astronomer-cloud
+
+- name: notify_promotion_production
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: WEBHOOK_URL
+    channel: ci-debug
+    username: terraform-ci
+    template: >
+      Review this plan file: TODO
+      To release, run:
+      ```
+      drone build promote astronomer/terraform-google-astronomer-cloud ${DRONE_BUILD_NUMBER} production`
+      ```
+  when:
+    event:
+      - tag
+    status:
+      - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+
+- name: deploy_to_production
+  image: sjmiller609/helm-kubectl-terraform:latest
+  environment:
+    GOOGLE_CREDENTIAL_FILE_CONTENT:
+      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT_STAGING
+  commands:
+    - FIRST_RUN=1 pipeline/release_prod_cloud.sh
+  when:
+    event:
+      - promote
+    status:
+      - success
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
     target:
-      - staging
+      - production

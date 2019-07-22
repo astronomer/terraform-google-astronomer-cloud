@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
   source  = "astronomer/astronomer-gcp/google"
-  version = "1.0.43"
+  version = "1.0.52"
   # source              = "../terraform-google-astronomer-gcp"
   email               = var.email
   deployment_id       = var.deployment_id
