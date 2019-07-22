@@ -5,12 +5,12 @@
 resource "local_file" "kubeconfig" {
   depends_on = [module.gcp]
   content    = module.gcp.kubeconfig
-  filename   = "${path.root}/kubeconfig"
+  filename   = "./kubeconfig"
 }
 
 provider "kubernetes" {
   version          = "~> 1.8"
-  config_path      = local_file.kubeconfig.filename
+  config_path      = var.kubeconfig_path != "" ? var.kubeconfig_path : local_file.kubeconfig.filename
   load_config_file = true
 }
 
@@ -20,7 +20,7 @@ provider "helm" {
   namespace       = "kube-system"
   install_tiller  = false
   kubernetes {
-    config_path      = local_file.kubeconfig.filename
+    config_path      = var.kubeconfig_path != "" ? var.kubeconfig_path : local_file.kubeconfig.filename
     load_config_file = true
   }
 }
