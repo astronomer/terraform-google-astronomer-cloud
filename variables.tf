@@ -34,3 +34,8 @@ variable "smtp_uri" {
   default = ""
   type    = string
 }
+
+variable "kubeconfig_path" {
+  default = ""
+  type    = string
+}
