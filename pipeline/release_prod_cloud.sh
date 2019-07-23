@@ -16,6 +16,7 @@ terraform -v
 DEPLOYMENT_ID='prod'
 ZONAL='false'
 PROJECT='astronomer-cloud-staging'
+STATE_BUCKET=astronomer-staging-terraform-state
 
 export EXAMPLE='from_scratch'
 
@@ -25,7 +26,7 @@ cp backend.tf.example examples/$EXAMPLE/backend.tf
 cd examples/$EXAMPLE
 # TODO: swap to prod stuff when we get a new project
 sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
-sed -i "s/BUCKET/astronomer-staging-terraform-state/g" backend.tf
+sed -i "s/BUCKET/$STATE_BUCKET/g" backend.tf
 sed -i "s/PROJECT/$PROJECT/g" providers.tf
 
 terraform init
@@ -79,24 +80,29 @@ chmod 755 kubeconfig
 ls -ltra
 
 if [[ ${TF_PLAN:-0} -eq 1 ]]; then
+
+	echo "\n Deleting old Terraform plan file"
+	gsutil rm gs://${STATE_BUCKET}/ci/tfplan || echo "\n State File does not exist"
+
 	terraform plan \
 	  -var "deployment_id=$DEPLOYMENT_ID" \
 	  -var "dns_managed_zone=staging-zone" \
 	  -var "zonal=$ZONAL" \
-    -var "kubeconfig_path=$(pwd)/kubeconfig" \
+      -var "kubeconfig_path=$(pwd)/kubeconfig" \
 	  -lock=false \
 	  -out=tfplan \
 	  -input=false
+
+	gsutil cp tfplan gs://${STATE_BUCKET}/ci/tfplan
 
 fi
 
 if [[ ${TF_APPLY:-0} -eq 1 ]]; then
 
+	echo "\n Retrieving Terraform plan from the GCS Bucket: ${STATE_BUCKET}"
+	gsutil cp gs://${STATE_BUCKET}/ci/tfplan tfplan
+
 	terraform apply --auto-approve \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-    -var "kubeconfig_path=$(pwd)/kubeconfig" \
 	  -lock=false \
 	  -refresh=false \
 	  -input=false tfplan
