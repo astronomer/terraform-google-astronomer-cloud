@@ -39,6 +39,12 @@ if [ $DESTROY -eq 1 ]; then
     # this resource should be ignored on destroy
     # remove it from the state to accomplish this
     terraform state rm module.astronomer_cloud.module.gcp.google_sql_user.airflow
+
+    # this stuff helps the delete be a little more reliable, since
+    # we don't rely on the kube api.
+    terraform state rm module.astronomer_cloud.module.astronomer
+    terraform state rm module.astronomer_cloud.module.system_components
+
     terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 else
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
