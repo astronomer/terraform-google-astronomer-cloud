@@ -96,7 +96,7 @@ if [[ ${TF_PLAN:-0} -eq 1 ]]; then
 	  -out=tfplan \
 	  -input=false
 
-	gsutil cp tfplan ${STATE_BUCKET}/ci/
+	gsutil cp tfplan ${STATE_BUCKET}/ci/tfplan
 
 fi
 
