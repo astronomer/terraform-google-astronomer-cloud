@@ -53,9 +53,6 @@ gcloud container clusters update $DEPLOYMENT_ID-cluster --enable-master-authoriz
 
 # terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud.module.gcp") | select(.type == "local_file") | select(.name == "kubeconfig") | .instances[0].attributes.sensitive_content' > kubeconfig
 
-# have terraform clone the helm chart
-terraform state rm module.astronomer_cloud.module.astronomer.null_resource.helm_repo
-
 # copy the kubeconfig from the terraform state
 terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
 chmod 755 kubeconfig
