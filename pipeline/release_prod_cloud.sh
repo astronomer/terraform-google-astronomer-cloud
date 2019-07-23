@@ -96,14 +96,14 @@ if [[ ${TF_PLAN:-0} -eq 1 ]]; then
 	  -out=tfplan \
 	  -input=false
 
-	gsutil cp tfplan ${STATE_BUCKET}/ci/tfplan
+	gsutil cp tfplan gs://${STATE_BUCKET}/ci/tfplan
 
 fi
 
 if [[ ${TF_APPLY:-0} -eq 1 ]]; then
 
 	echo "\n Retrieving Terraform plan from the GCS Bucket: ${STATE_BUCKET}"
-	gsutil cp ${STATE_BUCKET}/ci/tfplan tfplan
+	gsutil cp gs://${STATE_BUCKET}/ci/tfplan tfplan
 
 	terraform apply --auto-approve \
 	  -var "deployment_id=$DEPLOYMENT_ID" \
