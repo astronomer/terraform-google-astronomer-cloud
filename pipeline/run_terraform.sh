@@ -14,6 +14,7 @@ terraform -v
 # needs to be 32 characters or less and start with letter
 DEPLOYMENT_ID=ci$(echo "$DRONE_REPO_NAME$DRONE_BUILD_NUMBER" | md5sum | awk '{print substr($1,0,5)}')
 ZONAL='true'
+PROJECT='astronomer-cloud-dev-236021'
 
 if [ $REGIONAL -eq 1 ]; then
   DEPLOYMENT_ID=regional$DEPLOYMENT_ID
@@ -28,25 +29,50 @@ cd examples/$EXAMPLE
 
 sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
 sed -i "s/BUCKET/cloud2-dev-terraform/g" backend.tf
-sed -i "s/PROJECT/astronomer-cloud-dev-236021/g" providers.tf
+sed -i "s/PROJECT/$PROJECT/g" providers.tf
 
 cat providers.tf
 cat backend.tf
 
 terraform init
 
+# TODO: add to CI image
+apk add --update python curl which bash jq
+curl -sSL https://sdk.cloud.google.com > /tmp/gcl
+bash /tmp/gcl --install-dir=~/gcloud --disable-prompts > /dev/null 2>&1
+PATH=$PATH:/root/gcloud/google-cloud-sdk/bin
+
+# Set up gcloud CLI
+gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+gcloud config set project $PROJECT
+
 if [ $DESTROY -eq 1 ]; then
+
+    # whitelist our current IP for kube management API
+    gcloud container clusters update $DEPLOYMENT_ID-cluster --enable-master-authorized-networks --master-authorized-networks="$(curl icanhazip.com)/32" --zone=us-east4-a
+    
+    # copy the kubeconfig from the terraform state
+    terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
+    chmod 755 kubeconfig
+    export KUBECONFIG=$(pwd)/kubeconfig
+
+    # delete everything from kube
+    helm init --client-only
+    helm del $(helm ls --all --short) --purge
+    kubectl delete namespace astronomer
+
+    # remove the stuff we just delete from kube from the tf state
+    terraform state rm module.astronomer_cloud.module.astronomer
+    terraform state rm module.astronomer_cloud.module.system_components
+
     # this resource should be ignored on destroy
     # remove it from the state to accomplish this
     terraform state rm module.astronomer_cloud.module.gcp.google_sql_user.airflow
 
-    # this stuff helps the delete be a little more reliable, since
-    # we don't rely on the kube api.
-    terraform state rm module.astronomer_cloud.module.astronomer
-    terraform state rm module.astronomer_cloud.module.system_components
-
     terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
+
 else
+
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 fi
