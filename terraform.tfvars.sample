@@ -1,4 +1,3 @@
-project          = "GCP_PROJECT_ID"
 email            = "YOUR_EMAIL_ID"
 deployment_id    = "staging"
 dns_managed_zone = "steven-zone"

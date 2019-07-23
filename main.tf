@@ -27,7 +27,7 @@ module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
   version      = "0.1.0"
-  enable_istio = true
+  enable_istio = var.enable_istio
 }
 
 # Install the Astronomer platform via a helm chart

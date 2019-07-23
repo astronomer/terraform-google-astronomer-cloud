@@ -6,11 +6,11 @@ Requires Terraform 0.12+
 
 This repo uses the following Terraform modules:
 
-| Module                                                                                                                               | Version |
-|--------------------------------------------------------------------------------------------------------------------------------------|---------|
-| [astronomer/astronomer-gcp/google](https://registry.terraform.io/modules/astronomer/astronomer-gcp/)                                 | 0.2.4   |
-| [astronomer/astronomer-system-components/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer-system-components/) | 0.0.3   |
-| [astronomer/astronomer/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer/)                                     | 1.0.2   |
+| Module                                                                                                                               |
+|--------------------------------------------------------------------------------------------------------------------------------------|
+| [astronomer/astronomer-gcp/google](https://registry.terraform.io/modules/astronomer/astronomer-gcp/)                                 |
+| [astronomer/astronomer-system-components/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer-system-components/) |
+| [astronomer/astronomer/kubernetes](https://registry.terraform.io/modules/astronomer/astronomer/)                                     |
 
 These modules are downloaded from Terraform Registry into a local `.terraform` directory.
 
@@ -28,12 +28,31 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
     
     Example:
     ```
-    project          = "astronomer-cloud-dev-236021"
     email            = "kaxil@astronomer.io"
     deployment_id    = "staging"
     dns_managed_zone = "steven-zone"
     ```
 
+1. Copy `providers.tf.example` & rename it to `providers.tf` and replace `PROJECT` with your GCP Project ID:
+	
+	```bash
+	cp providers.tf.example providers.tf
+	
+	export PROJECT=GCP_PROJECT_ID
+	sed -i "s/PROJECT/$PROJECT/g" providers.tf
+	```
+
+1. (Optional) If you want to use remote Terraform state file, copy `backend.tf.example` & rename it to `backend.tf` & replace `BUCKET` & `REPLACE` with appropriate values.
+	```bash
+	cp backend.tf.example backend.tf
+
+	export DEPLOYMENT_ID=DEPLOYMENT_ID	# Set this value
+	export STATE_BUCKET=STATE_BUCKET	# Set this value
+
+	sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
+	sed -i "s/BUCKET/$STATE_BUCKET/g" backend.tf
+	```
+	
 1. Run the `deploy.sh` bash script:
 
     ```bash
@@ -55,7 +74,7 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
 
     ```bash
     export https_proxy=http://127.0.0.1:1234
-    export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com,github.com,.github.com"
+    export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com,github.com,.github.com,.acme-v02.api.letsencrypt.org,acme-v02.api.letsencrypt.org"
     
     terraform destroy 
     # OR
