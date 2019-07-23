@@ -50,8 +50,7 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    # - EXAMPLE=from_scratch pipeline/run_terraform.sh
-    - echo "skip"
+    - EXAMPLE=from_scratch pipeline/run_terraform.sh
   when:
     event:
       - push
@@ -65,8 +64,7 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    # - EXAMPLE=from_scratch pipeline/run_test.sh
-    - echo "skip"
+    - EXAMPLE=from_scratch pipeline/run_test.sh
   when:
     event:
       - push
@@ -79,8 +77,7 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    # - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
-    - echo "skip"
+    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
   when:
     event:
       - push
@@ -100,10 +97,9 @@ steps:
     GOOGLE_CREDENTIAL_FILE_CONTENT:
       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
   commands:
-    - echo "skip"
-    # - echo 'sleeping 10 minutes'
-    # - sleep 600
-    # - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+    - echo 'sleeping 10 minutes'
+    - sleep 600
+    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
   when:
     event:
       - push
@@ -225,8 +221,10 @@ steps:
     channel: ci-debug
     username: terraform-ci
     template: >
-      Review this plan file: TODO
+      Review the plan output here: {{build.link}}
+
       To release, run:
+
       ```
       # go to https://cloud.drone.io/account for personal access token
       export DRONE_SERVER=https://cloud.drone.io
@@ -257,3 +255,31 @@ steps:
       - astronomer/terraform-google-astronomer-cloud
     target:
       - production
+
+- name: notify_prod_updated
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: WEBHOOK_URL
+    channel: ci-debug
+    username: terraform-ci
+    template: >
+      {{repo.name}}
+      {{#success build.status}}
+      prod cloud updated! :sunglasses:
+      https://app.prod.astronomer-staging.com
+      {{else}}
+      ERROR: update of prod cloud failed!
+      build link: {{build.link}}
+      {{/success}}
+  when:
+    event:
+      - promote
+    status:
+      - success
+      - failure
+    repo:
+      - astronomer/terraform-google-astronomer-cloud
+    target:
+      - production
+
