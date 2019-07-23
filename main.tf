@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
   source  = "astronomer/astronomer-gcp/google"
-  version = "1.0.53"
+  version = "1.0.59"
   # source              = "../terraform-google-astronomer-gcp"
   email               = var.email
   deployment_id       = var.deployment_id
@@ -15,6 +15,9 @@ module "gcp" {
   # this setting is for how to configure the multi-tenant
   # node pool
   enable_gvisor = var.enable_gvisor
+
+  # don't create A record - we intend to do so manually.
+  do_not_create_a_record = true
 }
 
 # Install tiller, which is the server-side component
