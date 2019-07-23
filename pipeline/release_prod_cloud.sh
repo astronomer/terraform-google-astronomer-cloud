@@ -106,10 +106,6 @@ if [[ ${TF_APPLY:-0} -eq 1 ]]; then
 	gsutil cp gs://${STATE_BUCKET}/ci/tfplan tfplan
 
 	terraform apply --auto-approve \
-	  -var "deployment_id=$DEPLOYMENT_ID" \
-	  -var "dns_managed_zone=staging-zone" \
-	  -var "zonal=$ZONAL" \
-      -var "kubeconfig_path=$(pwd)/kubeconfig" \
 	  -lock=false \
 	  -refresh=false \
 	  -input=false tfplan
