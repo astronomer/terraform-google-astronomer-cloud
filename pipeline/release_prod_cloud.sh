@@ -85,7 +85,7 @@ ls -ltra
 if [[ ${TF_PLAN:-0} -eq 1 ]]; then
 
 	echo "\n Deleting old Terraform plan file"
-	gsutil rm ${STATE_BUCKET}/ci/tfplan || exit 0
+	gsutil rm gs://${STATE_BUCKET}/ci/tfplan || echo "\n State File does not exist"
 
 	terraform plan \
 	  -var "deployment_id=$DEPLOYMENT_ID" \
