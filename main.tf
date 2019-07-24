@@ -21,7 +21,7 @@ module "gcp" {
 
   # if the TLS cert and key are provided, we will want to use
   # them instead of asking for a Let's Encrypt cert.
-  lets_encrypt = var.tls_cert == "" ? true : false
+  lets_encrypt = var.lets_encrypt
 }
 
 # Install tiller, which is the server-side component
