@@ -50,6 +50,7 @@ nginx:
 astronomer:
   houston:
     config:
+    publicSignups: true
     %{if var.smtp_uri != ""}
       email:
         enabled: true
