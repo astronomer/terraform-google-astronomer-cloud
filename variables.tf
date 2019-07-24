@@ -1,3 +1,9 @@
+variable "base_domain" {
+  default     = ""
+  type        = string
+  description = "if blank, will use from gcp module"
+}
+
 variable "dns_managed_zone" {
   default = ""
   type    = string
