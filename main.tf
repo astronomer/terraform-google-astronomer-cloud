@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
   source  = "astronomer/astronomer-gcp/google"
-  version = "1.0.59"
+  version = "1.0.66"
   # source              = "../terraform-google-astronomer-gcp"
   email               = var.email
   deployment_id       = var.deployment_id
@@ -18,6 +18,10 @@ module "gcp" {
 
   # don't create A record - we intend to do so manually.
   do_not_create_a_record = var.do_not_create_a_record
+
+  # if the TLS cert and key are provided, we will want to use
+  # them instead of asking for a Let's Encrypt cert.
+  lets_encrypt = var.tls_cert == "" ? true : false
 }
 
 # Install tiller, which is the server-side component
@@ -38,8 +42,8 @@ module "astronomer" {
   astronomer_version = "0.10.0-alpha.4"
 
   db_connection_string = module.gcp.db_connection_string
-  tls_cert             = module.gcp.tls_cert
-  tls_key              = module.gcp.tls_key
+  tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
+  tls_key              = var.tls_cert == "" ? module.gcp.tls_key : var.tls_key
 
   gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
 
