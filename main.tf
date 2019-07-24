@@ -17,7 +17,7 @@ module "gcp" {
   enable_gvisor = var.enable_gvisor
 
   # don't create A record - we intend to do so manually.
-  do_not_create_a_record = true
+  do_not_create_a_record = var.do_not_create_a_record
 }
 
 # Install tiller, which is the server-side component

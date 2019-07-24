@@ -39,3 +39,8 @@ variable "kubeconfig_path" {
   default = ""
   type    = string
 }
+
+variable "do_not_create_a_record" {
+  default = false
+  type    = bool
+}
