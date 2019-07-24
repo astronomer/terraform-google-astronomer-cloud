@@ -1,5 +1,6 @@
 variable "dns_managed_zone" {
-  type = string
+  default = ""
+  type    = string
 }
 
 variable "email" {
