@@ -48,6 +48,9 @@ gcloud config set project $PROJECT
 
 if [ $DESTROY -eq 1 ]; then
 
+    # don't error out if some of these fail
+    set +e
+
     # whitelist our current IP for kube management API
     gcloud container clusters update $DEPLOYMENT_ID-cluster --enable-master-authorized-networks --master-authorized-networks="$(curl icanhazip.com)/32" --zone=us-east4-a
     
@@ -69,9 +72,15 @@ if [ $DESTROY -eq 1 ]; then
     # remove it from the state to accomplish this
     terraform state rm module.astronomer_cloud.module.gcp.google_sql_user.airflow
 
+    # resume normal failure
+    set -e
+
     terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 
 else
+
+    # create this first in order to fail fast if it does not work
+    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp.google_service_networking_connection.private_vpc_connection
 
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
     terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
