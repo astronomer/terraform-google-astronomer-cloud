@@ -39,7 +39,7 @@ module "astronomer" {
   dependencies       = [module.system_components.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.20"
-  astronomer_version = "0.10.0-alpha.4"
+  astronomer_version = "0.10.0-alpha.5"
 
   db_connection_string = module.gcp.db_connection_string
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
