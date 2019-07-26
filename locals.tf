@@ -48,7 +48,22 @@ nginx:
   perserveSourceIP: true
 
 astronomer:
+  %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
+  orbit:
+    env:
+      - name: STRIPE_PK
+        value: "${var.stripe_pk}"
+  %{endif}
   houston:
+    %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
+    env:
+      - name: STRIPE__SECRET_KEY
+        value: "${var.stripe_secret_key}"
+      - name: STRIPE__ENABLED
+        value: "true"
+      - name: AUTH__LOCAL__ENABLED
+        value: "true"
+    %{endif}
     config:
       publicSignups: true
     %{if var.smtp_uri != ""}
@@ -57,6 +72,8 @@ astronomer:
         smtpUrl: ${var.smtp_uri}
     %{endif}
       deployments:
+        astroUnit:
+          price: 10
         helm:
           affinity:
             nodeAntiAffinity:

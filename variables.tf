@@ -4,6 +4,16 @@ variable "base_domain" {
   description = "if blank, will use from gcp module"
 }
 
+variable "stripe_secret_key" {
+  default = ""
+  type    = string
+}
+
+variable "stripe_pk" {
+  default = ""
+  type    = string
+}
+
 variable "dns_managed_zone" {
   default = ""
   type    = string

@@ -1,3 +1,4 @@
 helm.astronomer.io
 .terraform
 .idea
+secrets
