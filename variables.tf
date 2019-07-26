@@ -4,6 +4,16 @@ variable "base_domain" {
   description = "if blank, will use from gcp module"
 }
 
+variable "worker_node_size" {
+  default = "n1-standard-4"
+  type    = string
+}
+
+variable "db_instance_size" {
+  default = "db-f1-micro"
+  type    = string
+}
+
 variable "stripe_secret_key" {
   default = ""
   type    = string

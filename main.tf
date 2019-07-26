@@ -22,6 +22,10 @@ module "gcp" {
   # if the TLS cert and key are provided, we will want to use
   # them instead of asking for a Let's Encrypt cert.
   lets_encrypt = var.lets_encrypt
+
+  # Instance sizes
+  machine_type   = var.worker_node_size
+  cloud_sql_tier = var.db_instance_size
 }
 
 # Install tiller, which is the server-side component
