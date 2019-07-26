@@ -24,6 +24,16 @@ variable "stripe_pk" {
   type    = string
 }
 
+variable "slack_alert_channel" {
+  default = ""
+  type    = string
+}
+
+variable "slack_alert_url" {
+  default = ""
+  type    = string
+}
+
 variable "dns_managed_zone" {
   default = ""
   type    = string
