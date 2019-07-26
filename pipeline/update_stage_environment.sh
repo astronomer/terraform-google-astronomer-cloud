@@ -16,5 +16,5 @@ git add stage/cloud/main.tf
 git status
 git config --global user.email "steven@astronomer.io"
 git config --global user.name "Drone CI"
-git commit -m "Drone CI: Update stage cloud with Astronomer chart version $DRONE_TAG"
+git commit -m "Drone CI: Update stage cloud with Terraform cloud module version $DRONE_TAG"
 git push origin master
