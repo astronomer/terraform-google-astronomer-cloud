@@ -103,6 +103,16 @@ astronomer:
       enabled: true
       bucket: ${module.gcp.container_registry_bucket_name}
 %{endif}  
+%{if var.slack_alert_channel != "" && var.slack_alert_url != ""}
+alertmanager:
+  receivers:
+    platform:
+      slack_configs:
+      - channel: "${var.slack_alert_channel}"
+        api_url: "${var.slack_alert_url}"
+        title: "{{ .CommonAnnotations.summary }}"
+        text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
+%{endif}
 
 EOF
 }
