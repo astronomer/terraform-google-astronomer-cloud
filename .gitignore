@@ -2,3 +2,4 @@ helm.astronomer.io
 .terraform
 .idea
 secrets
+.DS_Store

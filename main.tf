@@ -1,9 +1,8 @@
 # Deploy all the cloud-specific underlying infrastructure.
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
-  source  = "astronomer/astronomer-gcp/google"
-  version = "1.0.99"
-  # source              = "../terraform-google-astronomer-gcp"
+  source              = "astronomer/astronomer-gcp/google"
+  version             = "1.0.105"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
@@ -32,10 +31,15 @@ module "gcp" {
 # of Helm, the Kubernetes package manager.
 # Install Istio service mesh via helm charts.
 module "system_components" {
-  dependencies = [module.gcp.depended_on]
-  source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.0"
-  enable_istio = var.enable_istio
+  dependencies                 = [module.gcp.depended_on]
+  source                       = "astronomer/astronomer-system-components/kubernetes"
+  version                      = "0.1.2"
+  enable_cloud_sql_proxy       = true
+  enable_istio                 = var.enable_istio
+  gcp_service_account_key_json = module.gcp.gcp_cloud_sql_admin_key
+  cloudsql_instance            = module.gcp.db_instance_name
+  gcp_region                   = module.gcp.gcp_region
+  gcp_project                  = module.gcp.gcp_project
 }
 
 # Install the Astronomer platform via a helm chart
@@ -45,7 +49,7 @@ module "astronomer" {
   version            = "1.1.20"
   astronomer_version = "0.10.0-alpha.5"
 
-  db_connection_string = module.gcp.db_connection_string
+  db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
   tls_key              = var.tls_cert == "" ? module.gcp.tls_key : var.tls_key
 

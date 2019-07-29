@@ -6,3 +6,5 @@ deploy.sh
 destroy.sh
 helm.astronomer.io
 helm.astronomer.io*
+temp
+temp/*
