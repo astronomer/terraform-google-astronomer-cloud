@@ -31,9 +31,10 @@ module "gcp" {
 # of Helm, the Kubernetes package manager.
 # Install Istio service mesh via helm charts.
 module "system_components" {
-  dependencies                 = [module.gcp.depended_on]
-  source                       = "astronomer/astronomer-system-components/kubernetes"
-  version                      = "0.1.2"
+  dependencies = [module.gcp.depended_on]
+  source       = "astronomer/astronomer-system-components/kubernetes"
+  version      = "0.1.4"
+  # source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
   gcp_service_account_key_json = module.gcp.gcp_cloud_sql_admin_key
