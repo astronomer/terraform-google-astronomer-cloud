@@ -33,7 +33,7 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.4"
+  version      = "0.1.5"
   # source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
