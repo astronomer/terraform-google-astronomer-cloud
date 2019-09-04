@@ -82,6 +82,9 @@ astronomer:
         enabled: true
         smtpUrl: ${var.smtp_uri}
     %{endif}
+      helm:
+        # temporary workaround
+        namespace: astronomer
       deployments:
         %{if var.enable_istio}
         namespaceLabels:
