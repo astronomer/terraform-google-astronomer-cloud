@@ -44,69 +44,69 @@ steps:
       - pull_request
       - push
 
-- name: from_scratch
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
-  commands:
-    - EXAMPLE=from_scratch pipeline/run_terraform.sh
-  when:
-    event:
-      - push
-    branch:
-      - master
-
-# TODO: expand testing
-- name: system_test
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
-  commands:
-    - EXAMPLE=from_scratch pipeline/run_test.sh
-  when:
-    event:
-      - push
-    branch:
-      - master
-
-- name: from_scratch_cleanup
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
-  commands:
-    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
-  when:
-    event:
-      - push
-    status:
-      - failure
-      - success
-    branch:
-      - master
-
-# It helps to try the cleanup again if it fails
-# for some reason the first time.
-# A tagged release will not happen if the destroy
-# fails the first time.
-- name: wait_then_try_cleanup_again
-  image: sjmiller609/helm-kubectl-terraform:latest
-  environment:
-    GOOGLE_CREDENTIAL_FILE_CONTENT:
-      from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
-  commands:
-    - echo 'sleeping 10 minutes'
-    - sleep 600
-    - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
-  when:
-    event:
-      - push
-    branch:
-      - master
-    status:
-      - failure
+# - name: from_scratch
+#   image: sjmiller609/helm-kubectl-terraform:latest
+#   environment:
+#     GOOGLE_CREDENTIAL_FILE_CONTENT:
+#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+#   commands:
+#     - EXAMPLE=from_scratch pipeline/run_terraform.sh
+#   when:
+#     event:
+#       - push
+#     branch:
+#       - master
+# 
+# # TODO: expand testing
+# - name: system_test
+#   image: sjmiller609/helm-kubectl-terraform:latest
+#   environment:
+#     GOOGLE_CREDENTIAL_FILE_CONTENT:
+#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+#   commands:
+#     - EXAMPLE=from_scratch pipeline/run_test.sh
+#   when:
+#     event:
+#       - push
+#     branch:
+#       - master
+# 
+# - name: from_scratch_cleanup
+#   image: sjmiller609/helm-kubectl-terraform:latest
+#   environment:
+#     GOOGLE_CREDENTIAL_FILE_CONTENT:
+#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+#   commands:
+#     - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+#   when:
+#     event:
+#       - push
+#     status:
+#       - failure
+#       - success
+#     branch:
+#       - master
+# 
+# # It helps to try the cleanup again if it fails
+# # for some reason the first time.
+# # A tagged release will not happen if the destroy
+# # fails the first time.
+# - name: wait_then_try_cleanup_again
+#   image: sjmiller609/helm-kubectl-terraform:latest
+#   environment:
+#     GOOGLE_CREDENTIAL_FILE_CONTENT:
+#       from_secret: GOOGLE_CREDENTIAL_FILE_CONTENT
+#   commands:
+#     - echo 'sleeping 10 minutes'
+#     - sleep 600
+#     - DESTROY=1 EXAMPLE=from_scratch pipeline/run_terraform.sh
+#   when:
+#     event:
+#       - push
+#     branch:
+#       - master
+#     status:
+#       - failure
 
 - name: git_tag
   image: docker:git
