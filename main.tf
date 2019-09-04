@@ -33,7 +33,7 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.5"
+  version      = "0.1.6"
   # source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
@@ -41,6 +41,7 @@ module "system_components" {
   cloudsql_instance            = module.gcp.db_instance_name
   gcp_region                   = module.gcp.gcp_region
   gcp_project                  = module.gcp.gcp_project
+  extra_istio_helm_values      = local.extra_istio_helm_values
 }
 
 # Install the Astronomer platform via a helm chart

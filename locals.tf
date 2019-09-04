@@ -48,6 +48,17 @@ nginx:
   perserveSourceIP: true
 
 astronomer:
+  # temporary
+  images:
+    commander:
+      repository: astronomerinc/ap-commander
+      tag: master
+      pullPolicy: Always
+    houston:
+      repository: astronomerinc/ap-houston-api
+      tag: master
+      pullPolicy: Always
+
   %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
   orbit:
     env:
@@ -72,6 +83,13 @@ astronomer:
         smtpUrl: ${var.smtp_uri}
     %{endif}
       deployments:
+        %{if var.enable_istio}
+        namespaceLabels:
+          istio-injection: enabled
+          # temporary, remove below after default is provided by the following PR
+          # https://github.com/astronomer/helm.astronomer.io/pull/183
+          platform-release: astronomer
+        %{endif}
         astroUnit:
           price: 10
         helm:
@@ -102,7 +120,7 @@ astronomer:
     gcs:
       enabled: true
       bucket: ${module.gcp.container_registry_bucket_name}
-%{endif}  
+%{endif}
 %{if var.slack_alert_channel != "" && var.slack_alert_url != ""}
 alertmanager:
   receivers:
@@ -114,5 +132,18 @@ alertmanager:
         text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
 %{endif}
 
+EOF
+
+  extra_istio_helm_values = <<EOF
+---
+global:
+  proxy:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 248Mi
 EOF
 }

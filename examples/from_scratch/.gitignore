@@ -8,3 +8,4 @@ helm.astronomer.io
 helm.astronomer.io*
 temp
 temp/*
+*.tfvars
