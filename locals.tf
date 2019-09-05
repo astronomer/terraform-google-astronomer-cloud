@@ -48,16 +48,6 @@ nginx:
   perserveSourceIP: true
 
 astronomer:
-  # temporary
-  images:
-    commander:
-      repository: astronomerinc/ap-commander
-      tag: master
-      pullPolicy: Always
-    houston:
-      repository: astronomerinc/ap-houston-api
-      tag: master
-      pullPolicy: Always
 
   %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
   orbit:
