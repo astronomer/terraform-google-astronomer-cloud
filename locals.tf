@@ -138,5 +138,8 @@ global:
       limits:
         cpu: 200m
         memory: 248Mi
+gateways:
+  istio-ingressgateway:
+    enabled: false
 EOF
 }
