@@ -131,6 +131,8 @@ EOF
 ---
 global:
   proxy:
+    # TODO: Remove after upgrade to istio 1.3+
+    image: istio/proxyv2:1.3.0-rc.1
     resources:
       requests:
         cpu: 100m

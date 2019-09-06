@@ -46,7 +46,8 @@ module "system_components" {
 
 # Install the Astronomer platform via a helm chart
 module "astronomer" {
-  dependencies       = [module.system_components.depended_on]
+  dependencies = [module.system_components.depended_on,
+  module.gcp.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.20"
   astronomer_version = "0.10.1-alpha.1"

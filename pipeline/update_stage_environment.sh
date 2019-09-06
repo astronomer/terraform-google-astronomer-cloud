@@ -18,5 +18,5 @@ git add prod/cloud/main.tf
 git status
 git config --global user.email "steven@astronomer.io"
 git config --global user.name "Drone CI"
-git commit -m "Drone CI: Update cloud configuration with Terraform cloud module version $DRONE_TAG"
+git commit -m "Drone CI - terraform-google-astronomer-cloud $DRONE_TAG: $DRONE_COMMIT_MESSAGE"
 git push origin master
