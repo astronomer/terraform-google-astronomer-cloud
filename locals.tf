@@ -52,6 +52,8 @@ astronomer:
   %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
   orbit:
     env:
+      - name: ANALYTICS_TRACKING_ID
+        value: "tH2XzkxCDpdC8Jvn8YroJ"
       - name: STRIPE_PK
         value: "${var.stripe_pk}"
   %{endif}
