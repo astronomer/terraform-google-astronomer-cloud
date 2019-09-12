@@ -43,20 +43,22 @@ nginx:
 
 astronomer:
 
-  %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
   orbit:
     env:
+      - name: ANALYTICS_TRACKING_ID
+        value: "tH2XzkxCDpdC8Jvn8YroJ"
+  %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
       - name: STRIPE_PK
         value: "${var.stripe_pk}"
   %{endif}
   houston:
-    %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
     env:
+      - name: AUTH__LOCAL__ENABLED
+        value: "true"
+    %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
       - name: STRIPE__SECRET_KEY
         value: "${var.stripe_secret_key}"
       - name: STRIPE__ENABLED
-        value: "true"
-      - name: AUTH__LOCAL__ENABLED
         value: "true"
     %{endif}
     config:
