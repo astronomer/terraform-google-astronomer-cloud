@@ -78,9 +78,6 @@ astronomer:
         %{if var.enable_istio}
         namespaceLabels:
           istio-injection: enabled
-          # temporary, remove below after default is provided by the following PR
-          # https://github.com/astronomer/helm.astronomer.io/pull/183
-          platform-release: astronomer
         %{endif}
         astroUnit:
           price: 10
@@ -130,8 +127,6 @@ EOF
 ---
 global:
   proxy:
-    # TODO: Remove after upgrade to istio 1.3+
-    image: istio/proxyv2:1.3.0-rc.1
     resources:
       requests:
         cpu: 100m
