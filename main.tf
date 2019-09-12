@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
   source              = "astronomer/astronomer-gcp/google"
-  version             = "1.0.109"
+  version             = "1.0.111"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
