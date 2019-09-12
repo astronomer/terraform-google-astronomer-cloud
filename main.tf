@@ -42,6 +42,7 @@ module "system_components" {
   gcp_region                   = module.gcp.gcp_region
   gcp_project                  = module.gcp.gcp_project
   extra_istio_helm_values      = local.extra_istio_helm_values
+  istio_helm_release_version   = "1.3.0"
 }
 
 # Install the Astronomer platform via a helm chart
