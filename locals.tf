@@ -70,8 +70,11 @@ astronomer:
         smtpUrl: ${var.smtp_uri}
     %{endif}
       helm:
-        # temporary workaround
-        namespace: astronomer
+        env:
+          - name: AIRFLOW__WEBSERVER__ANALYTICS_TOOL
+            value: "metarouter"
+          - name: AIRFLOW__WEBSERVER__ANALYTICS_ID
+            value: "tH2XzkxCDpdC8Jvn8YroJ"
       deployments:
         %{if var.enable_istio}
         namespaceLabels:
