@@ -24,10 +24,10 @@ global:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
           - matchExpressions:
-            - key: "beta.kubernetes.io/os"
+            - key: "astronomer.io/multi-tenant"
               operator: In
               values:
-              - "linux"
+              - "true"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
@@ -90,10 +90,10 @@ astronomer:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
                 - matchExpressions:
-                  - key: "beta.kubernetes.io/os"
+                  - key: "astronomer.io/multi-tenant"
                     operator: In
                     values:
-                    - "linux"
+                    - "true"
 %{if var.enable_gvisor == true}
           tolerations:
           - effect: NoSchedule
