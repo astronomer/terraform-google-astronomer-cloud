@@ -20,14 +20,14 @@ global:
               - "false"
   deploymentNodePool:
     affinity:
-      nodeAntiAffinity:
+      nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           nodeSelectorTerms:
           - matchExpressions:
-            - key: "astronomer.io/multi-tenant"
+            - key: "beta.kubernetes.io/os"
               operator: In
               values:
-              - "false"
+              - "linux"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
@@ -86,14 +86,14 @@ astronomer:
           price: 10
         helm:
           affinity:
-            nodeAntiAffinity:
+            nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
                 nodeSelectorTerms:
                 - matchExpressions:
-                  - key: "astronomer.io/multi-tenant"
+                  - key: "beta.kubernetes.io/os"
                     operator: In
                     values:
-                    - "false"
+                    - "linux"
 %{if var.enable_gvisor == true}
           tolerations:
           - effect: NoSchedule
