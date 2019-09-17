@@ -1,8 +1,8 @@
 # Deploy all the cloud-specific underlying infrastructure.
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
-  source              = "astronomer/astronomer-gcp/google"
-//  source              = "../terraform-google-astronomer-gcp"
+  source = "astronomer/astronomer-gcp/google"
+  //  source              = "../terraform-google-astronomer-gcp"
   version             = "1.0.111"
   email               = var.email
   deployment_id       = var.deployment_id
@@ -35,7 +35,7 @@ module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
   version      = "0.1.8"
-//  source                       = "../terraform-kubernetes-astronomer-system-components"
+  //  source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
   gcp_service_account_key_json = module.gcp.gcp_cloud_sql_admin_key
