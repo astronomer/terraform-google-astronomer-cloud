@@ -138,4 +138,31 @@ gateways:
   istio-ingressgateway:
     enabled: false
 EOF
+
+  extra_velero_helm_values = <<EOF
+---
+configuration:
+  provider: gcp
+  backupStorageLocation:
+    name: gcp
+    bucket: "${module.gcp.gcp_velero_backups_bucket_name}"
+metrics:
+  enabled: true
+credentials:
+  secretContents:
+    cloud: |-
+      ${indent(6, module.gcp.gcp_velero_service_account_key)}
+schedules:
+  astronomer-platform:
+    schedule: "0 2 * * *"
+    template:
+      ttl: "720h"
+      includedNamespaces:
+        - astronomer
+  full-back-up:
+    schedule: "0 4 * * *"
+    template:
+      ttl: "720h"
+EOF
+
 }
