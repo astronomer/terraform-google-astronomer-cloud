@@ -3,3 +3,6 @@ helm.astronomer.io
 .idea
 secrets
 .DS_Store
+istio
+kubeconfig*
+*terraform.tfstate*

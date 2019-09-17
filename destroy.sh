@@ -9,11 +9,6 @@ fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-terraform init
-
-# deploy EKS, RDS
-terraform apply -var-file=$1 --target=module.gcp
-
 management_api=$(sed -En 's|'management_api'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' $1)
 
 if [[ "${management_api}" != "public" ]]; then
@@ -37,11 +32,11 @@ if [[ "${management_api}" != "public" ]]; then
 	export https_proxy=http://127.0.0.1:1234
 fi
 
-# install Tiller in the cluster
-terraform apply -var-file=$1 --target=module.system_components
+# remove the stuff we just delete from kube from the tf state
+terraform state rm module.astronomer_cloud.module.astronomer
+terraform state rm module.astronomer_cloud.module.system_components
 
-# install astronomer in the cluster
-terraform apply -var-file=$1 --target=module.astronomer
+terraform destroy -var-file=$1
 
 if [[ "${management_api}" != "public" ]]; then
 	# Clear Proxy Variables
