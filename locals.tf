@@ -18,16 +18,18 @@ global:
               operator: In
               values:
               - "false"
-  deploymentNodePool:
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: "astronomer.io/multi-tenant"
-              operator: In
-              values:
-              - "true"
+  # TODO: this applies to fluentd
+  # put this back in after kube exector runs on just mt nodes
+  # deploymentNodePool:
+  #   affinity:
+  #     nodeAffinity:
+  #       requiredDuringSchedulingIgnoredDuringExecution:
+  #         nodeSelectorTerms:
+  #         - matchExpressions:
+  #           - key: "astronomer.io/multi-tenant"
+  #             operator: In
+  #             values:
+  #             - "true"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
