@@ -1,7 +1,8 @@
 # Deploy all the cloud-specific underlying infrastructure.
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
-  source              = "astronomer/astronomer-gcp/google"
+  source = "astronomer/astronomer-gcp/google"
+  //  source              = "../terraform-google-astronomer-gcp"
   version             = "1.0.121"
   email               = var.email
   deployment_id       = var.deployment_id
@@ -33,8 +34,8 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.7"
-  # source                       = "../terraform-kubernetes-astronomer-system-components"
+  version      = "0.1.8"
+  //  source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
   gcp_service_account_key_json = module.gcp.gcp_cloud_sql_admin_key
@@ -43,12 +44,13 @@ module "system_components" {
   gcp_project                  = module.gcp.gcp_project
   extra_istio_helm_values      = local.extra_istio_helm_values
   istio_helm_release_version   = "1.3.0"
+  enable_velero                = var.enable_velero
+  extra_velero_helm_values     = local.extra_velero_helm_values
 }
 
 # Install the Astronomer platform via a helm chart
 module "astronomer" {
-  dependencies = [module.system_components.depended_on,
-  module.gcp.depended_on]
+  dependencies       = [module.system_components.depended_on, module.gcp.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.20"
   astronomer_version = "0.10.1-alpha.12"
