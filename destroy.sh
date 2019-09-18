@@ -33,8 +33,8 @@ if [[ "${management_api}" != "public" ]]; then
 fi
 
 # remove the stuff we just delete from kube from the tf state
-terraform state rm module.astronomer_cloud.module.astronomer
-terraform state rm module.astronomer_cloud.module.system_components
+terraform state rm module.astronomer
+terraform state rm module.system_components
 
 terraform destroy -var-file=$1
 
