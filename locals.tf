@@ -148,6 +148,8 @@ configuration:
   backupStorageLocation:
     name: gcp
     bucket: "${module.gcp.gcp_velero_backups_bucket_name}"
+  volumeSnapshotLocation:
+    name: gcp
 metrics:
   enabled: true
 credentials:
