@@ -36,7 +36,7 @@ fi
 terraform state rm module.astronomer
 terraform state rm module.system_components
 
-terraform destroy -var-file=$1
+terraform destroy -var-file=$1  -target=module.gcp
 
 if [[ "${management_api}" != "public" ]]; then
 	# Clear Proxy Variables
