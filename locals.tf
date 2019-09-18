@@ -139,6 +139,21 @@ global:
 gateways:
   istio-ingressgateway:
     enabled: false
+# minimums above 1 to make
+# single-pod interruption
+# acceptable to the pod disruption
+# budget
+sidecarInjectorWebhook:
+  replicaCount: 2
+galley:
+  replicaCount: 2
+pilot:
+  autoscaleMin: 2
+mixer:
+  policy:
+    autoscaleMin: 2
+  telemetry:
+    autoscaleMin: 2
 EOF
 
   extra_velero_helm_values = <<EOF
