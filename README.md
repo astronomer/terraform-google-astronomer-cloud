@@ -31,6 +31,7 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
     email            = "kaxil@astronomer.io"
     deployment_id    = "staging"
     dns_managed_zone = "steven-zone"
+    management_api   = "public"
     ```
 
 1. Copy `providers.tf.example` & rename it to `providers.tf` and replace `PROJECT` with your GCP Project ID:
@@ -73,12 +74,5 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
 1. Run the following command:
 
     ```bash
-    export https_proxy=http://127.0.0.1:1234
-    export no_proxy="googleapis.com,.google.com,metadata,.googleapis.com,github.com,.github.com,.acme-v02.api.letsencrypt.org,acme-v02.api.letsencrypt.org"
-    
-    terraform destroy 
-    # OR
-    # terraform destroy -var-file=TFVAR_FILE_NAME
-    
-    unset no_proxy https_proxy
+    ./destroy.sh terraform.tfvars
     ```
