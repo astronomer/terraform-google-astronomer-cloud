@@ -34,12 +34,12 @@ module "gcp" {
     {
       effect = "NO_SCHEDULE"
       key    = "platform"
-      value  = "false"
+      value  = "true"
     },
     {
       effect = "NO_EXECUTE"
       key    = "platform"
-      value  = "false"
+      value  = "true"
     },
   ]
 }
