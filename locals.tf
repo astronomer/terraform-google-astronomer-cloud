@@ -18,6 +18,12 @@ global:
               operator: In
               values:
               - "false"
+    tolerations:
+      - key: "platform"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+
   # TODO: this applies to fluentd
   # put this back in after kube exector runs on just mt nodes
   # deploymentNodePool:
