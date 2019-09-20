@@ -26,6 +26,22 @@ module "gcp" {
   # Instance sizes
   machine_type   = var.worker_node_size
   cloud_sql_tier = var.db_instance_size
+
+  # Only allow platform pods to created on this NodePool by using the below taint
+  # Unless pods has the matching key,value for the taint the pods would not be
+  # scheduled
+  platform_node_pool_taints = [
+    {
+      effect = "NO_SCHEDULE"
+      key    = "platform"
+      value  = "false"
+    },
+    {
+      effect = "NO_EXECUTE"
+      key    = "platform"
+      value  = "false"
+    },
+  ]
 }
 
 # Install tiller, which is the server-side component
