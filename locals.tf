@@ -18,6 +18,12 @@ global:
               operator: In
               values:
               - "false"
+    tolerations:
+      - key: "platform"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"
+
   deploymentNodePool:
     affinity:
       nodeAffinity:
