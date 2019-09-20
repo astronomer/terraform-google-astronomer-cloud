@@ -23,19 +23,16 @@ global:
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
-
-  # TODO: this applies to fluentd
-  # put this back in after kube exector runs on just mt nodes
-  # deploymentNodePool:
-  #   affinity:
-  #     nodeAffinity:
-  #       requiredDuringSchedulingIgnoredDuringExecution:
-  #         nodeSelectorTerms:
-  #         - matchExpressions:
-  #           - key: "astronomer.io/multi-tenant"
-  #             operator: In
-  #             values:
-  #             - "true"
+  deploymentNodePool:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: "astronomer.io/multi-tenant"
+              operator: In
+              values:
+              - "true"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
@@ -83,6 +80,44 @@ astronomer:
           - name: AIRFLOW__WEBSERVER__ANALYTICS_ID
             value: "tH2XzkxCDpdC8Jvn8YroJ"
       deployments:
+        maxExtraAu: 1000
+        maxPodAu: 100
+        components:
+          - name: scheduler
+            au:
+              default: 5
+              limit: 100
+          - name: webserver
+            au:
+              default: 5
+              limit: 100
+          - name: statsd
+            au:
+              default: 2
+              limit: 30
+          - name: pgbouncer
+            au:
+              default: 2
+              limit: 2
+          - name: flower
+            au:
+              default: 2
+              limit: 2
+          - name: redis
+            au:
+              default: 2
+              limit: 2
+          - name: workers
+            au:
+              default: 10
+              limit: 100
+            extra:
+              - name: terminationGracePeriodSeconds
+                default: 600
+                limit: 36000
+              - name: replicas
+                default: 1
+                limit: 20
         %{if var.enable_istio}
         namespaceLabels:
           istio-injection: enabled
