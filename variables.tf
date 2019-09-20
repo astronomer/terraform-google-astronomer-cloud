@@ -98,3 +98,8 @@ variable "lets_encrypt" {
   default = true
   type    = bool
 }
+
+variable "enable_velero" {
+  default = true
+  type    = bool
+}

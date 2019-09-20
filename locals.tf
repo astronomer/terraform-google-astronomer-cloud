@@ -24,16 +24,18 @@ global:
         value: "true"
         effect: "NoSchedule"
 
-  deploymentNodePool:
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: "astronomer.io/multi-tenant"
-              operator: In
-              values:
-              - "true"
+  # TODO: this applies to fluentd
+  # put this back in after kube exector runs on just mt nodes
+  # deploymentNodePool:
+  #   affinity:
+  #     nodeAffinity:
+  #       requiredDuringSchedulingIgnoredDuringExecution:
+  #         nodeSelectorTerms:
+  #         - matchExpressions:
+  #           - key: "astronomer.io/multi-tenant"
+  #             operator: In
+  #             values:
+  #             - "true"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
@@ -143,5 +145,49 @@ global:
 gateways:
   istio-ingressgateway:
     enabled: false
+# minimums above 1 to make
+# single-pod interruption
+# acceptable to the pod disruption
+# budget
+sidecarInjectorWebhook:
+  replicaCount: 2
+galley:
+  replicaCount: 2
+pilot:
+  autoscaleMin: 2
+mixer:
+  policy:
+    autoscaleMin: 2
+  telemetry:
+    autoscaleMin: 2
 EOF
+
+  extra_velero_helm_values = <<EOF
+---
+configuration:
+  provider: gcp
+  backupStorageLocation:
+    name: gcp
+    bucket: "${module.gcp.gcp_velero_backups_bucket_name}"
+  volumeSnapshotLocation:
+    name: gcp
+metrics:
+  enabled: true
+credentials:
+  secretContents:
+    cloud: |-
+      ${indent(6, module.gcp.gcp_velero_service_account_key)}
+schedules:
+  astronomer-platform:
+    schedule: "0 2 * * *"
+    template:
+      ttl: "720h"
+      includedNamespaces:
+        - astronomer
+  full-back-up:
+    schedule: "0 4 * * *"
+    template:
+      ttl: "720h"
+EOF
+
 }
