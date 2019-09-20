@@ -36,11 +36,6 @@ module "gcp" {
       key    = "platform"
       value  = "true"
     },
-    {
-      effect = "NO_EXECUTE"
-      key    = "platform"
-      value  = "true"
-    },
   ]
 }
 
