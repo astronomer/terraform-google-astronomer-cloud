@@ -208,6 +208,15 @@ EOF
 
   extra_velero_helm_values = <<EOF
 ---
+# Allow Velero to run on platform nodes...
+tolerations:
+- key: "platform"
+  operator: "Equal"
+  value: "true"
+  effect: "NoSchedule"
+# ... and require it to land on that node pool.
+nodeSelector:
+  astronomer.io/multi-tenant: "false"
 configuration:
   provider: gcp
   backupStorageLocation:
