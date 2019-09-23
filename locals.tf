@@ -169,6 +169,15 @@ EOF
   extra_istio_helm_values = <<EOF
 ---
 global:
+  # Allow Istio control plane to run on platform nodes...
+  defaultTolerations:
+  - key: "platform"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+  # ... and require it to land on that node pool.
+  defaultNodeSelector:
+    astronomer.io/multi-tenant: "false"
   proxy:
     resources:
       requests:
