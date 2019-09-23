@@ -243,4 +243,16 @@ schedules:
       ttl: "720h"
 EOF
 
+  tiller_tolerations = [
+    {
+      key      = "platform",
+      operator = "Equal",
+      value    = "true",
+      effect   = "NoSchedule"
+    }
+  ]
+
+  tiller_node_selectors = {
+    "astronomer.io/multi-tenant" = "false"
+  }
 }
