@@ -40,6 +40,9 @@ global:
       operator: Equal
       value: gvisor
 %{endif}
+%{if var.enable_velero == true}
+  veleroEnabled: true
+%{endif}
 nginx:
   loadBalancerIP: ${module.gcp.load_balancer_ip == "" ? "~" : module.gcp.load_balancer_ip}
   # For cloud, the load balancer should be public
@@ -166,7 +169,13 @@ alertmanager:
         title: "{{ .CommonAnnotations.summary }}"
         text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
 %{endif}
-
+%{if var.enable_velero == true}
+grafana:
+  dashboards:
+    default:
+      velero:
+        file: "dashboards/velero.json"
+%{endif}
 EOF
 
   extra_istio_helm_values = <<EOF
