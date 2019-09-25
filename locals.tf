@@ -82,6 +82,7 @@ astronomer:
       deployments:
         maxExtraAu: 1000
         maxPodAu: 100
+        sidecarAu: 1
         components:
           - name: scheduler
             au:
