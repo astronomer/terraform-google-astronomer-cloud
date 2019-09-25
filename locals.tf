@@ -83,8 +83,8 @@ astronomer:
         maxExtraAu: 1000
         maxPodAu: 100
         sidecars:
-          cpu: 100
-          memory: 200
+          cpu: 200
+          memory: 248
         components:
           - name: scheduler
             au:
