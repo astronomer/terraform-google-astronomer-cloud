@@ -131,6 +131,8 @@ astronomer:
         astroUnit:
           price: 10
         helm:
+          pgbouncer:
+            resultBackendPoolSize: 10
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
@@ -146,12 +148,6 @@ astronomer:
             key: sandbox.gke.io/runtime
             operator: Equal
             value: gvisor
-          webserver:
-            runtimeClassName: gvisor
-          scheduler:
-            runtimeClassName: gvisor
-          workers:
-            runtimeClassName: gvisor
 %{endif}
 %{if module.gcp.gcp_default_service_account_key != ""}
   registry:
