@@ -194,6 +194,8 @@ global:
       limits:
         cpu: 200m
         memory: 248Mi
+kiali:
+  enabled: true
 gateways:
   istio-ingressgateway:
     enabled: false
