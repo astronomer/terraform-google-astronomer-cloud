@@ -6,3 +6,5 @@ secrets
 istio
 kubeconfig*
 *terraform.tfstate*
+providers.tf
+terraform.tfvars
