@@ -165,13 +165,6 @@ alertmanager:
         title: "{{ .CommonAnnotations.summary }}"
         text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
 %{endif}
-%{if var.enable_velero == true}
-grafana:
-  dashboards:
-    default:
-      velero:
-        file: "dashboards/velero.json"
-%{endif}
 EOF
 
   extra_istio_helm_values = <<EOF
@@ -194,6 +187,8 @@ global:
       limits:
         cpu: 200m
         memory: 248Mi
+kiali:
+  enabled: true
 gateways:
   istio-ingressgateway:
     enabled: false
