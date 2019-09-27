@@ -91,7 +91,7 @@ astronomer:
         components:
           - name: scheduler
             au:
-              default: 5
+              default: 10
               limit: 100
           - name: webserver
             au:
