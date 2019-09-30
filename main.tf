@@ -25,6 +25,7 @@ module "gcp" {
 
   # Instance sizes
   machine_type   = var.worker_node_size
+  max_node_count = var.max_worker_node_count
   cloud_sql_tier = var.db_instance_size
 
   # Only allow platform pods to created on this NodePool by using the below taint
