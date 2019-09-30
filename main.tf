@@ -66,7 +66,7 @@ module "astronomer" {
   dependencies       = [module.system_components.depended_on, module.gcp.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.20"
-  astronomer_version = "0.10.1-rc.2"
+  astronomer_version = "0.10.1-rc.3"
 
   db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
