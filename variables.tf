@@ -57,6 +57,16 @@ variable "enable_istio" {
   type    = bool
 }
 
+variable "enable_kubecost" {
+  default = false
+  type    = bool
+}
+
+variable "kubecost_token" {
+  default = ""
+  type    = string
+}
+
 variable "zonal_cluster" {
   default = false
   type    = bool

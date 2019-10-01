@@ -46,10 +46,12 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.10"
+  version      = "0.1.12"
   //  source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
+  enable_kubecost              = var.enable_kubecost
+  kubecost_token               = var.kubecost_token
   gcp_service_account_key_json = module.gcp.gcp_cloud_sql_admin_key
   cloudsql_instance            = module.gcp.db_instance_name
   gcp_region                   = module.gcp.gcp_region
