@@ -25,6 +25,7 @@ module "gcp" {
 
   # Instance sizes
   machine_type   = var.worker_node_size
+  max_node_count = var.max_worker_node_count
   cloud_sql_tier = var.db_instance_size
 
   # Only allow platform pods to created on this NodePool by using the below taint
@@ -45,16 +46,19 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.10"
+  version      = "0.1.12"
   //  source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
+  enable_kubecost              = var.enable_kubecost
+  kubecost_token               = var.kubecost_token
   gcp_service_account_key_json = module.gcp.gcp_cloud_sql_admin_key
   cloudsql_instance            = module.gcp.db_instance_name
   gcp_region                   = module.gcp.gcp_region
   gcp_project                  = module.gcp.gcp_project
   extra_istio_helm_values      = local.extra_istio_helm_values
   istio_helm_release_version   = "1.3.0"
+  kubecost_helm_chart_version  = "1.44.3"
   enable_velero                = var.enable_velero
   extra_velero_helm_values     = local.extra_velero_helm_values
   tiller_tolerations           = local.tiller_tolerations

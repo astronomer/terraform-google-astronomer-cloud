@@ -9,6 +9,11 @@ variable "worker_node_size" {
   type    = string
 }
 
+variable "max_worker_node_count" {
+  default     = 10
+  description = "The approximate maximum number of nodes in the GKE worker node pool. The exact max will be 3 * ceil(your_value / 3.0) ."
+}
+
 variable "db_instance_size" {
   default = "db-f1-micro"
   type    = string
@@ -50,6 +55,16 @@ variable "deployment_id" {
 variable "enable_istio" {
   default = true
   type    = bool
+}
+
+variable "enable_kubecost" {
+  default = false
+  type    = bool
+}
+
+variable "kubecost_token" {
+  default = ""
+  type    = string
 }
 
 variable "zonal_cluster" {
