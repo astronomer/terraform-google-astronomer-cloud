@@ -172,7 +172,14 @@ alertmanager:
       - channel: "${var.slack_alert_channel}"
         api_url: "${var.slack_alert_url}"
         title: "{{ .CommonAnnotations.summary }}"
-        text: "{{ range .Alerts }}{{ .Annotations.description }}\n{{ end }}"
+        text: |-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }}
+            *Description:* {{ .Annotations.description }}
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
 %{endif}
 EOF
 
