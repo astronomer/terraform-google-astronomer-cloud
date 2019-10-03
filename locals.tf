@@ -33,15 +33,6 @@ global:
               operator: In
               values:
               - "true"
-prometheus:
-  # Configure resources
-  resources:
-    requests:
-      cpu: "1000m"
-      memory: "4Gi"
-    limits:
-      cpu: "2000m"
-      memory: "16Gi"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
@@ -57,6 +48,7 @@ nginx:
   # For cloud, the load balancer should be public
   privateLoadBalancer: false
   perserveSourceIP: true
+
 
 astronomer:
 
@@ -223,6 +215,15 @@ mixer:
     autoscaleMin: 2
   telemetry:
     autoscaleMin: 2
+prometheus:
+  # Configure resources
+  resources:
+    requests:
+      cpu: "1000m"
+      memory: "4Gi"
+    limits:
+      cpu: "2000m"
+      memory: "16Gi"
 EOF
 
   extra_velero_helm_values = <<EOF
