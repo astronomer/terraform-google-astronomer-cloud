@@ -260,6 +260,23 @@ schedules:
       ttl: "720h"
 EOF
 
+  extra_googlesqlproxy_helm_values = <<EOF
+---
+networkPolicy:
+  enabled: true
+  ingress:
+    from:
+      - namespaceSelector: {}
+        podSelector:
+          matchLabels:
+            tier: airflow
+            component: pgbouncer
+      - podSelector:
+          matchLabels:
+            tier: astronomer
+            component: prisma
+EOF
+
   tiller_tolerations = [
     {
       key      = "platform",
