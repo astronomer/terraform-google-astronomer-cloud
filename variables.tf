@@ -52,6 +52,11 @@ variable "deployment_id" {
   type = string
 }
 
+variable "public_signups" {
+  default = true
+  type    = bool
+}
+
 variable "enable_istio" {
   default = true
   type    = bool
