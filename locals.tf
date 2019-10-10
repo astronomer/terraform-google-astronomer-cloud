@@ -68,7 +68,11 @@ astronomer:
         value: "true"
     %{endif}
     config:
+    %{if var.public_signups}
       publicSignups: true
+    %{else}
+      publicSignups: false
+    %{endif}
     %{if var.smtp_uri != ""}
       email:
         enabled: true
