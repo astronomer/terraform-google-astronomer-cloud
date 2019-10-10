@@ -3,7 +3,7 @@
 module "gcp" {
   source = "astronomer/astronomer-gcp/google"
   //  source              = "../terraform-google-astronomer-gcp"
-  version             = "1.0.156"
+  version             = "1.0.159"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
@@ -46,7 +46,7 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.12"
+  version      = "0.1.13"
   //  source                       = "../terraform-kubernetes-astronomer-system-components"
   enable_cloud_sql_proxy       = true
   enable_istio                 = var.enable_istio
@@ -58,7 +58,7 @@ module "system_components" {
   gcp_project                  = module.gcp.gcp_project
   extra_istio_helm_values      = local.extra_istio_helm_values
   istio_helm_release_version   = "1.3.0"
-  kubecost_helm_chart_version  = "1.44.3"
+  kubecost_helm_chart_version  = "1.45.0"
   enable_velero                = var.enable_velero
   extra_velero_helm_values     = local.extra_velero_helm_values
   tiller_tolerations           = local.tiller_tolerations

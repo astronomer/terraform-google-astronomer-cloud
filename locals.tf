@@ -266,7 +266,8 @@ networkPolicy:
   enabled: true
   ingress:
     from:
-      - podSelector:
+      - namespaceSelector: {}
+        podSelector:
           matchLabels:
             tier: airflow
             component: pgbouncer
