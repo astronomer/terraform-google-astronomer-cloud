@@ -29,6 +29,11 @@ variable "stripe_pk" {
   type    = string
 }
 
+variable "pagerduty_service_key" {
+  default = ""
+  type    = string
+}
+
 variable "slack_alert_channel" {
   default = ""
   type    = string
