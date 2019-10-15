@@ -175,7 +175,7 @@ alertmanager:
           {{ end }}
 %{if var.pagerduty_service_key != ""}
       pagerduty_configs:
-      - service_key: "${var.pagerduty_service_key}"
+      - routing_key: "${var.pagerduty_service_key}"
 %{endif}
 %{endif}
 prometheus:
