@@ -173,6 +173,10 @@ alertmanager:
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
+%{if var.pagerduty_service_key != ""}
+      pagerduty_configs:
+      - service_key: "${var.pagerduty_service_key}"
+%{endif}
 %{endif}
 prometheus:
   # Configure resources
