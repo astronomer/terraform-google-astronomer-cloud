@@ -176,6 +176,14 @@ alertmanager:
 %{if var.pagerduty_service_key != ""}
       pagerduty_configs:
       - routing_key: "${var.pagerduty_service_key}"
+        description: |-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }}
+            *Description:* {{ .Annotations.description }}
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
 %{endif}
 %{endif}
 prometheus:
