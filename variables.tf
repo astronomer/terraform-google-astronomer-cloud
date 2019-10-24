@@ -29,6 +29,11 @@ variable "stripe_pk" {
   type    = string
 }
 
+variable "pagerduty_service_key" {
+  default = ""
+  type    = string
+}
+
 variable "slack_alert_channel" {
   default = ""
   type    = string
@@ -50,6 +55,11 @@ variable "email" {
 
 variable "deployment_id" {
   type = string
+}
+
+variable "public_signups" {
+  default = true
+  type    = bool
 }
 
 variable "enable_istio" {

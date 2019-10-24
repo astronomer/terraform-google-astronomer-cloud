@@ -68,7 +68,11 @@ astronomer:
         value: "true"
     %{endif}
     config:
+    %{if var.public_signups}
       publicSignups: true
+    %{else}
+      publicSignups: false
+    %{endif}
     %{if var.smtp_uri != ""}
       email:
         enabled: true
@@ -169,6 +173,11 @@ alertmanager:
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
+%{if var.pagerduty_service_key != ""}
+      pagerduty_configs:
+      - routing_key: "${var.pagerduty_service_key}"
+        description: "{{ .CommonAnnotations.summary }}"
+%{endif}
 %{endif}
 prometheus:
   # Configure resources
