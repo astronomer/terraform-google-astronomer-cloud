@@ -59,7 +59,7 @@ module "system_components" {
   extra_istio_helm_values      = local.extra_istio_helm_values
   istio_helm_release_version   = "1.3.0"
   kubecost_helm_chart_version  = "1.45.1"
-  tiller_version               = "2.14.1"
+  tiller_version               = "2.15.0"
   enable_velero                = var.enable_velero
   extra_velero_helm_values     = local.extra_velero_helm_values
   tiller_tolerations           = local.tiller_tolerations
@@ -71,7 +71,7 @@ module "astronomer" {
   dependencies       = [module.system_components.depended_on, module.gcp.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.20"
-  astronomer_version = "0.10.2"
+  astronomer_version = "0.10.2-fix.1"
 
   db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
