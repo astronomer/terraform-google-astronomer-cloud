@@ -78,12 +78,6 @@ astronomer:
         enabled: true
         smtpUrl: ${var.smtp_uri}
     %{endif}
-      helm:
-        env:
-          - name: AIRFLOW__WEBSERVER__ANALYTICS_TOOL
-            value: "metarouter"
-          - name: AIRFLOW__WEBSERVER__ANALYTICS_ID
-            value: "tH2XzkxCDpdC8Jvn8YroJ"
       deployments:
         maxExtraAu: 1000
         maxPodAu: 100
@@ -133,6 +127,17 @@ astronomer:
         astroUnit:
           price: 10
         helm:
+          env:
+            - name: AIRFLOW__WEBSERVER__ANALYTICS_TOOL
+              value: "metarouter"
+            - name: AIRFLOW__WEBSERVER__ANALYTICS_ID
+              value: "tH2XzkxCDpdC8Jvn8YroJ"
+          webserver:
+            livenessProbe:
+              initialDelaySeconds: 15
+              timeoutSeconds: 30
+              failureThreshold: 60
+              periodSeconds: 8
           pgbouncer:
             resultBackendPoolSize: 10
           affinity:
