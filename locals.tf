@@ -133,11 +133,10 @@ astronomer:
             - name: AIRFLOW__WEBSERVER__ANALYTICS_ID
               value: "tH2XzkxCDpdC8Jvn8YroJ"
           webserver:
-            livenessProbe:
-              initialDelaySeconds: 15
-              timeoutSeconds: 30
-              failureThreshold: 60
-              periodSeconds: 8
+            initialDelaySeconds: 15
+            timeoutSeconds: 30
+            failureThreshold: 60
+            periodSeconds: 8
           pgbouncer:
             resultBackendPoolSize: 10
           affinity:
