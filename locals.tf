@@ -129,9 +129,9 @@ astronomer:
         helm:
           env:
             - name: AIRFLOW__WEBSERVER__ANALYTICS_TOOL
-              value: "metarouter"
+              value: "metarouter=AIRFLOW__WEBSERVER__ANALYTICS_TOOL"
             - name: AIRFLOW__WEBSERVER__ANALYTICS_ID
-              value: "tH2XzkxCDpdC8Jvn8YroJ"
+              value: "tH2XzkxCDpdC8Jvn8YroJ=AIRFLOW__WEBSERVER__ANALYTICS_ID"
           webserver:
             initialDelaySeconds: 15
             timeoutSeconds: 30
