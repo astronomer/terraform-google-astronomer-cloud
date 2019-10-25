@@ -127,11 +127,6 @@ astronomer:
         astroUnit:
           price: 10
         helm:
-          env:
-            - name: AIRFLOW__WEBSERVER__ANALYTICS_TOOL
-              value: "metarouter"
-            - name: AIRFLOW__WEBSERVER__ANALYTICS_ID
-              value: "tH2XzkxCDpdC8Jvn8YroJ"
           webserver:
             initialDelaySeconds: 15
             timeoutSeconds: 30
