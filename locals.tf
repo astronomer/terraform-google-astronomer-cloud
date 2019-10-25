@@ -275,7 +275,7 @@ EOF
 
   extra_googlesqlproxy_helm_values = <<EOF
 ---
-replicasCount: 5
+replicasCount: 10
 EOF
 
   tiller_tolerations = [
