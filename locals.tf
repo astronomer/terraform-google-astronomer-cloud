@@ -275,6 +275,7 @@ EOF
 
   extra_googlesqlproxy_helm_values = <<EOF
 ---
+replicasCount: 5
 networkPolicy:
   enabled: true
   ingress:
