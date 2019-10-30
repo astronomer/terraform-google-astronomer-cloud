@@ -16,6 +16,9 @@ module "gcp" {
   # node pool
   enable_gvisor = var.enable_gvisor
 
+  # Kube version minimum
+  kube_version_gke = var.kube_version_gke
+
   # don't create A record - we intend to do so manually.
   do_not_create_a_record = var.do_not_create_a_record
 
