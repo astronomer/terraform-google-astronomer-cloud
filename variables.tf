@@ -134,3 +134,8 @@ variable "kube_version_gke" {
   default     = "1.14.6-gke.2"
   description = "The kubernetes version to use in GKE"
 }
+
+variable "tiller_version" {
+  default     = "2.15.0"
+  description = "The version of tiller to install"
+}
