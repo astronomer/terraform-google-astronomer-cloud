@@ -172,6 +172,19 @@ alertmanager:
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
+    airflow:
+      slack_configs:
+      - channel: "${var.slack_alert_channel}"
+        api_url: "${var.slack_alert_url}"
+        title: "{{ .CommonAnnotations.summary }}"
+        text: |-
+          {{ range .Alerts }}
+            *Alert:* {{ .Annotations.summary }}
+            *Description:* {{ .Annotations.description }}
+            *Details:*
+            {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+            {{ end }}
+          {{ end }}
 %{if var.pagerduty_service_key != ""}
       pagerduty_configs:
       - routing_key: "${var.pagerduty_service_key}"
