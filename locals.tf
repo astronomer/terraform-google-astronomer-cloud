@@ -82,7 +82,7 @@ astronomer:
         maxExtraAu: 1000
         maxPodAu: 100
         sidecars:
-          cpu: 200
+          cpu: 400
           memory: 248
         components:
           - name: scheduler
@@ -207,7 +207,7 @@ global:
         cpu: 100m
         memory: 128Mi
       limits:
-        cpu: 200m
+        cpu: 400m
         memory: 248Mi
 kiali:
   enabled: true
