@@ -136,6 +136,6 @@ variable "kube_version_gke" {
 }
 
 variable "tiller_version" {
-  default     = "2.15.2"
+  default     = "2.14.3"
   description = "The version of tiller to install"
 }
