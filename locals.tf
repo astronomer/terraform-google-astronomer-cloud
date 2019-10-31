@@ -173,6 +173,9 @@ alertmanager:
             {{ end }}
           {{ end }}
     airflow:
+      webhook_configs:
+      - url: "http://{{ .Release.Name }}-houston:8871/v1/alerts"
+        send_resolved: true
       slack_configs:
       - channel: "${var.slack_alert_channel}"
         api_url: "${var.slack_alert_url}"
