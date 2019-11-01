@@ -139,3 +139,9 @@ variable "tiller_version" {
   default     = "2.14.3"
   description = "The version of tiller to install"
 }
+
+variable "enable_knative" {
+  type        = bool
+  default     = false
+  description = "enable_istio=true is required for knative to work"
+}
