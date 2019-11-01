@@ -132,6 +132,12 @@ astronomer:
             timeoutSeconds: 30
             failureThreshold: 60
             periodSeconds: 8
+          workers:
+            resources:
+              limits:
+                ephemeral-storage: "10Gi"
+              requests:
+                ephemeral-storage: "1Gi"
           pgbouncer:
             resultBackendPoolSize: 10
           affinity:
