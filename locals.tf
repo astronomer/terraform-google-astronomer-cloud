@@ -138,6 +138,9 @@ astronomer:
                 ephemeral-storage: "10Gi"
               requests:
                 ephemeral-storage: "1Gi"
+          quotas:
+            requests.ephemeral-storage: "50Gi"
+            limits.ephemeral-storage: "256Gi"
           pgbouncer:
             resultBackendPoolSize: 10
           affinity:
