@@ -181,6 +181,11 @@ alertmanager:
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
+%{if var.pagerduty_service_key != ""}
+      pagerduty_configs:
+      - routing_key: "${var.pagerduty_service_key}"
+        description: "{{ .CommonAnnotations.summary }}"
+%{endif}
     airflow:
       webhook_configs:
       - url: "http://astronomer-houston:8871/v1/alerts"
@@ -197,11 +202,6 @@ alertmanager:
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
-%{if var.pagerduty_service_key != ""}
-      pagerduty_configs:
-      - routing_key: "${var.pagerduty_service_key}"
-        description: "{{ .CommonAnnotations.summary }}"
-%{endif}
 %{endif}
 prometheus:
   # Configure resources
