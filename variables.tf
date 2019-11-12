@@ -145,3 +145,9 @@ variable "enable_knative" {
   default     = false
   description = "enable_istio=true is required for knative to work"
 }
+
+variable "create_dynamic_pods_nodepool" {
+  type        = bool
+  default     = false
+  description = "If true, creates a NodePool for the pods spun up using KubernetesPodsOperator or KubernetesExecutor"
+}
