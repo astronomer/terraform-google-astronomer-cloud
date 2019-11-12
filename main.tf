@@ -41,6 +41,16 @@ module "gcp" {
       value  = "true"
     },
   ]
+
+  # This pool will be used to direct all dynamic KubernetesExecutor and
+  # KubernetesPodOperator pods
+  dp_node_pool_taints = [
+    {
+      effect = "NO_SCHEDULE"
+      key    = "dynamic-pods"
+      value  = "true"
+    },
+  ]
 }
 
 # Install tiller, which is the server-side component
