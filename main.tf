@@ -80,7 +80,7 @@ module "astronomer" {
 
   db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
-  tls_key              = var.tls_cert == "" ? module.gcp.tls_key : var.tls_key
+  tls_key              = var.tls_key == "" ? module.gcp.tls_key : var.tls_key
 
   gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
 
