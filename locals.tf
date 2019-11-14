@@ -160,11 +160,14 @@ astronomer:
             value: gvisor
 %{endif}
 %{if var.create_dynamic_pods_nodepool == true}
-          podMutatationTolerations:
-            - key: "dynamic-pods"
-              operator: "Equal"
-              value: "true"
-              effect: "NoSchedule"
+          podMutation:
+            tolerations:
+              - key: "dynamic-pods"
+                operator: "Equal"
+                value: "true"
+                effect: "NoSchedule"
+            nodeSelectors:
+              "astronomer.io/dynamic-pods": "true"
 %{endif}
 %{if module.gcp.gcp_default_service_account_key != ""}
   registry:
