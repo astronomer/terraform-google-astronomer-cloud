@@ -166,8 +166,15 @@ astronomer:
                 operator: "Equal"
                 value: "true"
                 effect: "NoSchedule"
-            nodeSelectors:
-              "astronomer.io/dynamic-pods": "true"
+            affinity: 
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: "astronomer.io/dynamic-pods"
+                          operator: In
+                          values:
+                            - "true"
 %{endif}
 %{if module.gcp.gcp_default_service_account_key != ""}
   registry:
