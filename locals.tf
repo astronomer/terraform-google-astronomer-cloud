@@ -285,6 +285,29 @@ prometheus:
       cpu: "15000m"
       # this is the maximum possible value for n1-standard-16
       memory: "57Gi"
+fluentd:
+  nodeSelector: {}
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "astronomer.io/multi-tenant"
+                operator: In
+                values:
+                  - "true"
+%{if var.create_dynamic_pods_nodepool == true}
+          - matchExpressions:
+              - key: "astronomer.io/dynamic-pods"
+                operator: In
+                values:
+                  - "true"
+  tolerations:
+    - effect: NoSchedule
+      key: dynamic-pods
+      operator: Equal
+      value: "true"
+%{endif}
 EOF
 
   extra_istio_helm_values = <<EOF
