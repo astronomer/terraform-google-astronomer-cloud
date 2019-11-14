@@ -159,6 +159,23 @@ astronomer:
             operator: Equal
             value: gvisor
 %{endif}
+%{if var.create_dynamic_pods_nodepool == true}
+          podMutation:
+            tolerations:
+              - key: "dynamic-pods"
+                operator: "Equal"
+                value: "true"
+                effect: "NoSchedule"
+            affinity:
+              nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+                  nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: "astronomer.io/dynamic-pods"
+                          operator: In
+                          values:
+                            - "true"
+%{endif}
 %{if module.gcp.gcp_default_service_account_key != ""}
   registry:
     gcs:
