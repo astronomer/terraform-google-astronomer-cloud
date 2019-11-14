@@ -166,7 +166,7 @@ astronomer:
                 operator: "Equal"
                 value: "true"
                 effect: "NoSchedule"
-            affinity: 
+            affinity:
               nodeAffinity:
                 requiredDuringSchedulingIgnoredDuringExecution:
                   nodeSelectorTerms:
