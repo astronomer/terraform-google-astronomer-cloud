@@ -68,6 +68,9 @@ astronomer:
         value: "true"
     %{endif}
     config:
+      cors:
+        allowedOrigins:
+          - https://orbit-dev.netlify.com/
     %{if var.public_signups}
       publicSignups: true
     %{else}
