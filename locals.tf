@@ -286,7 +286,6 @@ prometheus:
       # this is the maximum possible value for n1-standard-16
       memory: "57Gi"
 fluentd:
-  nodeSelector: {}
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
@@ -297,11 +296,6 @@ fluentd:
                 values:
                   - "true"
 %{if var.create_dynamic_pods_nodepool == true}
-          - matchExpressions:
-              - key: "astronomer.io/dynamic-pods"
-                operator: In
-                values:
-                  - "true"
   tolerations:
     - effect: NoSchedule
       key: dynamic-pods
