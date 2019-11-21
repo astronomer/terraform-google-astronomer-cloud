@@ -48,7 +48,15 @@ nginx:
   # For cloud, the load balancer should be public
   privateLoadBalancer: false
   perserveSourceIP: true
+elasticsearch:
+  data:
+    replicas: 4
 astronomer:
+  images:
+    registry:
+      repository: registry
+      tag: 2.7.1
+      pullPolicy: IfNotPresent
   orbit:
     env:
       - name: ANALYTICS_TRACKING_ID
@@ -228,10 +236,10 @@ prometheus:
   resources:
     requests:
       cpu: "1000m"
-      memory: "4Gi"
-    limits:
-      cpu: "2000m"
       memory: "16Gi"
+    limits:
+      cpu: "4000m"
+      memory: "32Gi"
 EOF
 
   extra_istio_helm_values = <<EOF
