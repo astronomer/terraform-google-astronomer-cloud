@@ -48,6 +48,9 @@ nginx:
   # For cloud, the load balancer should be public
   privateLoadBalancer: false
   perserveSourceIP: true
+elasticsearch:
+  data:
+    replicas: 4
 astronomer:
   images:
     registry:
