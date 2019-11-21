@@ -27,9 +27,10 @@ module "gcp" {
   lets_encrypt = var.lets_encrypt
 
   # Instance sizes
-  machine_type   = var.worker_node_size
-  max_node_count = var.max_worker_node_count
-  cloud_sql_tier = var.db_instance_size
+  machine_type          = var.worker_node_size
+  machine_type_platform = "n1-standard-16"
+  max_node_count        = var.max_worker_node_count
+  cloud_sql_tier        = var.db_instance_size
 
   # Only allow platform pods to created on this NodePool by using the below taint
   # Unless pods has the matching key,value for the taint the pods would not be
@@ -87,7 +88,7 @@ module "astronomer" {
   dependencies       = [module.system_components.depended_on, module.gcp.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.20"
-  astronomer_version = "0.10.3-fix.1"
+  astronomer_version = "0.10.3-fix.2"
 
   db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
