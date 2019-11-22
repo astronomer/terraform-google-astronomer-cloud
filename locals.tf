@@ -50,6 +50,14 @@ nginx:
   perserveSourceIP: true
 elasticsearch:
   data:
+    heapMemory: 2g
+    resources:
+      limits:
+        cpu:     2
+        memory:  6Gi
+      requests:
+        cpu:     500m
+        memory:  2Gi
     replicas: 4
 astronomer:
   images:
