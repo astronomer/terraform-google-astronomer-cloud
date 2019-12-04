@@ -240,6 +240,11 @@ alertmanager:
           {{ end }}
 %{endif}
 prometheus:
+  # We bill ~30d, so let's retain all metrics for
+  # 30d plus a grace period of 5 days
+  # This will require more memory for some queries,
+  # so we will up the resource limits as well.
+  retention: "35d"
   adminAirflowNamespace: "astronomer-celestial-wormhole-4369"
   # Configure resources
   resources:
@@ -247,8 +252,10 @@ prometheus:
       cpu: "1000m"
       memory: "16Gi"
     limits:
-      cpu: "4000m"
-      memory: "32Gi"
+      # this is the maximum possible value for n1-standard-16
+      cpu: "15000m"
+      # this is the maximum possible value for n1-standard-16
+      memory: "57Gi"
 EOF
 
   extra_istio_helm_values = <<EOF
