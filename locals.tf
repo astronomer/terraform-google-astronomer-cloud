@@ -250,7 +250,7 @@ prometheus:
   resources:
     requests:
       cpu: "1000m"
-      memory: "16Gi"
+      memory: "32Gi"
     limits:
       # this is the maximum possible value for n1-standard-16
       cpu: "15000m"
