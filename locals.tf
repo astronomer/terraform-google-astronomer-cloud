@@ -245,7 +245,7 @@ prometheus:
   # This will require more memory for some queries,
   # so we will up the resource limits as well.
   retention: "35d"
-  adminAirflowNamespace: "astronomer-celestial-wormhole-4369"
+  adminAirflowReleaseName: "celestial-wormhole-4369"
   # Configure resources
   resources:
     requests:
