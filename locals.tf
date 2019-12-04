@@ -240,6 +240,7 @@ alertmanager:
           {{ end }}
 %{endif}
 prometheus:
+  adminAirflowNamespace: "astronomer-celestial-wormhole-4369"
   # Configure resources
   resources:
     requests:
