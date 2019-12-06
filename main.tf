@@ -79,6 +79,7 @@ module "system_components" {
   tiller_version                   = var.tiller_version
   enable_velero                    = var.enable_velero
   extra_velero_helm_values         = local.extra_velero_helm_values
+  extra_kubecost_helm_values       = local.extra_kubecost_helm_values
   tiller_tolerations               = local.tiller_tolerations
   tiller_node_selectors            = local.tiller_node_selectors
 }

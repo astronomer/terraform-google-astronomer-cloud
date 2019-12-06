@@ -240,6 +240,8 @@ alertmanager:
           {{ end }}
 %{endif}
 prometheus:
+  persistence:
+    size: "300Gi"
   # We bill ~30d, so let's retain all metrics for
   # 30d plus a grace period of 5 days
   # This will require more memory for some queries,
@@ -341,6 +343,15 @@ EOF
 ---
 replicasCount: 10
 EOF
+  extra_kubecost_helm_values       = <<EOF
+---
+prometheus:
+  server:
+    persistentVolume:
+      # default of 32Gi was exhausted
+      size: 100Gi
+EOF
+
 
   tiller_tolerations = [
     {
