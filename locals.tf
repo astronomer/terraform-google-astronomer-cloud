@@ -349,7 +349,7 @@ prometheus:
   server:
     persistentVolume:
       # default of 32Gi was exhausted
-      size: 100Gi
+      size: 300Gi
 EOF
 
 
