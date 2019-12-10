@@ -34,6 +34,16 @@ variable "pagerduty_service_key" {
   type    = string
 }
 
+variable "slack_alert_channel_platform" {
+  default = ""
+  type    = string
+}
+
+variable "slack_alert_url_platform" {
+  default = ""
+  type    = string
+}
+
 variable "slack_alert_channel" {
   default = ""
   type    = string
