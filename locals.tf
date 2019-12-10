@@ -217,8 +217,8 @@ alertmanager:
             {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
             {{ end }}
           {{ end }}
-      - channel: "${var.slack_alert_channel}-platform"
-        api_url: "${var.slack_alert_url}"
+      - channel: "${var.slack_alert_channel_platform}"
+        api_url: "${var.slack_alert_url_platform}"
         title: "{{ .CommonAnnotations.summary }}"
         text: |-
           {{ range .Alerts }}
