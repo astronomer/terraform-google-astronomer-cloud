@@ -9,6 +9,10 @@ module "gcp" {
   dns_managed_zone    = var.dns_managed_zone
   zonal_cluster       = var.zonal_cluster
   management_endpoint = var.management_api
+
+  # Enables GKE Metered Billing and exports billing data to BigQuery
+  enable_gke_metered_billing = var.enable_gke_metered_billing
+
   # How long to wait after deploying GKE.
   # This is needed GKE-managed services to stabilize.
   wait_for = "430"
