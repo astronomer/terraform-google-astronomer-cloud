@@ -58,7 +58,7 @@ elasticsearch:
       requests:
         cpu:     500m
         memory:  2Gi
-    replicas: 6
+    replicas: 8
 astronomer:
   images:
     registry:
