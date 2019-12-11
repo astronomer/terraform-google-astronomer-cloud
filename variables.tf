@@ -161,3 +161,9 @@ variable "create_dynamic_pods_nodepool" {
   default     = false
   description = "If true, creates a NodePool for the pods spun up using KubernetesPodsOperator or KubernetesExecutor"
 }
+
+variable "enable_gke_metered_billing" {
+  type        = bool
+  default     = true
+  description = "If true, enables GKE metered billing to track costs on namespaces & label level"
+}
