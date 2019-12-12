@@ -254,7 +254,7 @@ alertmanager:
 %{endif}
 prometheus:
   persistence:
-    size: "300Gi"
+    size: "400Gi"
   # We bill ~30d, so let's retain all metrics for
   # 30d plus a grace period of 5 days
   # This will require more memory for some queries,
