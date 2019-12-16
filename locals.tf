@@ -253,6 +253,7 @@ alertmanager:
           {{ end }}
 %{endif}
 prometheus:
+  replicas: 2
   persistence:
     size: "400Gi"
   # We bill ~30d, so let's retain all metrics for
