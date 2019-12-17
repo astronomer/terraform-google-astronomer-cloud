@@ -75,6 +75,11 @@ astronomer:
   %{endif}
   houston:
     env:
+      - name: ANALYTICS__ENABLED
+        value: "true"
+      - name: ANALYTICS__WRITE_KEY
+        # not a secret
+        value: "d8f1dqq4uXo24anKBADSn8MFqgTq32Rx"
       - name: AUTH__LOCAL__ENABLED
         value: "true"
     %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
