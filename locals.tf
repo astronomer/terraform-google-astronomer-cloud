@@ -77,7 +77,7 @@ astronomer:
     env:
       - name: ANALYTICS__ENABLED
         value: "true"
-      - namee: ANALYTICS__WRITE_KEY
+      - name: ANALYTICS__WRITE_KEY
         # not a secret
         value: "d8f1dqq4uXo24anKBADSn8MFqgTq32Rx"
       - name: AUTH__LOCAL__ENABLED
