@@ -287,6 +287,10 @@ global:
   defaultNodeSelector:
     astronomer.io/multi-tenant: "false"
   proxy:
+    # Only use sidecar for RFC1918 address space (private networks).
+    # This will allow mesh-external traffic to leave the cluster
+    # without going through a sidecar.
+    includeIPRanges: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
     resources:
       requests:
         cpu: 100m
