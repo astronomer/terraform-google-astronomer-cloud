@@ -44,6 +44,14 @@ global:
   veleroEnabled: true
 %{endif}
 nginx:
+  replicas: 3
+  resources:
+    limits:
+      cpu: 3
+      memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
   loadBalancerIP: ${module.gcp.load_balancer_ip == "" ? "~" : module.gcp.load_balancer_ip}
   # For cloud, the load balancer should be public
   privateLoadBalancer: false
