@@ -23,16 +23,6 @@ global:
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
-  deploymentNodePool:
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: "astronomer.io/multi-tenant"
-              operator: In
-              values:
-              - "true"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
