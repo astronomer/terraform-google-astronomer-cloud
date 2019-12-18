@@ -300,6 +300,8 @@ global:
   defaultNodeSelector:
     astronomer.io/multi-tenant: "false"
   proxy:
+    # https://github.com/istio/istio/issues/8247
+    concurrency: 1
     # Only use sidecar for RFC1918 address space (private networks).
     # This will allow mesh-external traffic to leave the cluster
     # without going through a sidecar.
