@@ -374,8 +374,8 @@ EOF
 ---
 replicasCount: 10
 podAnnotations:
-  sidecar.istio.io/proxyCPU: 1
-  sidecar.istio.io/proxyMemory: 300Mi
+  sidecar.istio.io/proxyCPU: "1000m"
+  sidecar.istio.io/proxyMemory: "300Mi"
 EOF
   extra_kubecost_helm_values       = <<EOF
 ---
