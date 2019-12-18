@@ -65,27 +65,28 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
   source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.16"
+  version      = "0.1.17"
   //  source                       = "../terraform-kubernetes-astronomer-system-components"
-  enable_cloud_sql_proxy           = true
-  enable_istio                     = var.enable_istio
-  enable_knative                   = var.enable_knative
-  enable_kubecost                  = var.enable_kubecost
-  kubecost_token                   = var.kubecost_token
-  gcp_service_account_key_json     = module.gcp.gcp_cloud_sql_admin_key
-  cloudsql_instance                = module.gcp.db_instance_name
-  gcp_region                       = module.gcp.gcp_region
-  gcp_project                      = module.gcp.gcp_project
-  extra_istio_helm_values          = local.extra_istio_helm_values
-  extra_googlesqlproxy_helm_values = local.extra_googlesqlproxy_helm_values
-  istio_helm_release_version       = "1.3.0"
-  kubecost_helm_chart_version      = "1.45.1"
-  tiller_version                   = var.tiller_version
-  enable_velero                    = var.enable_velero
-  extra_velero_helm_values         = local.extra_velero_helm_values
-  extra_kubecost_helm_values       = local.extra_kubecost_helm_values
-  tiller_tolerations               = local.tiller_tolerations
-  tiller_node_selectors            = local.tiller_node_selectors
+  enable_cloud_sql_proxy             = true
+  enable_istio                       = var.enable_istio
+  enable_knative                     = var.enable_knative
+  enable_kubecost                    = var.enable_kubecost
+  kubecost_token                     = var.kubecost_token
+  gcp_service_account_key_json       = module.gcp.gcp_cloud_sql_admin_key
+  cloudsql_instance                  = module.gcp.db_instance_name
+  gcp_region                         = module.gcp.gcp_region
+  gcp_project                        = module.gcp.gcp_project
+  extra_istio_helm_values            = local.extra_istio_helm_values
+  extra_googlesqlproxy_helm_values   = local.extra_googlesqlproxy_helm_values
+  cloud_sql_proxy_helm_chart_version = "0.19.2"
+  istio_helm_release_version         = "1.3.0"
+  kubecost_helm_chart_version        = "1.45.1"
+  tiller_version                     = var.tiller_version
+  enable_velero                      = var.enable_velero
+  extra_velero_helm_values           = local.extra_velero_helm_values
+  extra_kubecost_helm_values         = local.extra_kubecost_helm_values
+  tiller_tolerations                 = local.tiller_tolerations
+  tiller_node_selectors              = local.tiller_node_selectors
 }
 
 # Install the Astronomer platform via a helm chart
