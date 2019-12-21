@@ -265,6 +265,15 @@ alertmanager:
             {{ end }}
           {{ end }}
 %{endif}
+kubed:
+  # Configure resources
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "2"
+      memory: "1024Mi"
 prometheus:
   replicas: 2
   persistence:
