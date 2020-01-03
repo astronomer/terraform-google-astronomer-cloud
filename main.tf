@@ -35,6 +35,7 @@ module "gcp" {
   machine_type_platform = "n1-standard-16"
   max_node_count        = var.max_worker_node_count
   cloud_sql_tier        = var.db_instance_size
+  db_max_connections    = 1000
 
   # Only allow platform pods to created on this NodePool by using the below taint
   # Unless pods has the matching key,value for the taint the pods would not be
