@@ -276,7 +276,12 @@ prometheus:
   # This will require more memory for some queries,
   # so we will up the resource limits as well.
   retention: "35d"
-  adminAirflowReleaseName: "celestial-wormhole-4369"
+  ingressNetworkPolicyExtraSelectors: 
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          release: celestial-wormhole-4369
+          tier: airflow
   # Configure resources
   resources:
     requests:
