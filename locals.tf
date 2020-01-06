@@ -47,6 +47,9 @@ nginx:
   privateLoadBalancer: false
   perserveSourceIP: true
 elasticsearch:
+  client:
+    podAnnotations:
+      sidecar.istio.io/proxyCPU: 1500m
   data:
     heapMemory: 2g
     resources:
