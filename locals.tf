@@ -158,6 +158,12 @@ astronomer:
         %{endif}
         astroUnit:
           price: 10
+        chart:
+          version: 0.11.0-rc.1
+        images:
+          - version: 1.10.5
+            channel: stable
+            tag: 1.10.5-alpine3.10-onbuild
         helm:
           webserver:
             initialDelaySeconds: 15
