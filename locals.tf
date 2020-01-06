@@ -23,16 +23,6 @@ global:
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
-  deploymentNodePool:
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          nodeSelectorTerms:
-          - matchExpressions:
-            - key: "astronomer.io/multi-tenant"
-              operator: In
-              values:
-              - "true"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
@@ -57,6 +47,9 @@ nginx:
   privateLoadBalancer: false
   perserveSourceIP: true
 elasticsearch:
+  client:
+    podAnnotations:
+      sidecar.istio.io/proxyCPU: 1500m
   data:
     heapMemory: 2g
     resources:
@@ -283,7 +276,12 @@ prometheus:
   # This will require more memory for some queries,
   # so we will up the resource limits as well.
   retention: "35d"
-  adminAirflowReleaseName: "celestial-wormhole-4369"
+  ingressNetworkPolicyExtraSelectors: 
+    - namespaceSelector: {}
+      podSelector:
+        matchLabels:
+          release: celestial-wormhole-4369
+          tier: airflow
   # Configure resources
   resources:
     requests:
@@ -294,6 +292,23 @@ prometheus:
       cpu: "15000m"
       # this is the maximum possible value for n1-standard-16
       memory: "57Gi"
+fluentd:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: "astronomer.io/multi-tenant"
+                operator: In
+                values:
+                  - "true"
+%{if var.create_dynamic_pods_nodepool == true}
+  tolerations:
+    - effect: NoSchedule
+      key: dynamic-pods
+      operator: Equal
+      value: "true"
+%{endif}
 EOF
 
   extra_istio_helm_values = <<EOF
