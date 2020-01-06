@@ -51,12 +51,12 @@ elasticsearch:
     heapMemory: 2g
     resources:
       limits:
-        cpu:     2
+        cpu:     4
         memory:  6Gi
       requests:
-        cpu:     500m
+        cpu:     100m
         memory:  2Gi
-    replicas: 10
+    replicas: 14
 astronomer:
   images:
     registry:
@@ -255,10 +255,19 @@ alertmanager:
             {{ end }}
           {{ end }}
 %{endif}
+kubed:
+  # Configure resources
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"
+    limits:
+      cpu: "2"
+      memory: "1024Mi"
 prometheus:
   replicas: 2
   persistence:
-    size: "400Gi"
+    size: "550Gi"
   # We bill ~30d, so let's retain all metrics for
   # 30d plus a grace period of 5 days
   # This will require more memory for some queries,

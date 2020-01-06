@@ -3,7 +3,7 @@
 module "gcp" {
   source = "astronomer/astronomer-gcp/google"
   //  source              = "../terraform-google-astronomer-gcp"
-  version             = "1.0.207"
+  version             = "1.0.217"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
@@ -35,6 +35,7 @@ module "gcp" {
   machine_type_platform = "n1-standard-16"
   max_node_count        = var.max_worker_node_count
   cloud_sql_tier        = var.db_instance_size
+  db_max_connections    = 1000
 
   # Only allow platform pods to created on this NodePool by using the below taint
   # Unless pods has the matching key,value for the taint the pods would not be
@@ -94,7 +95,7 @@ module "astronomer" {
   dependencies       = [module.system_components.depended_on, module.gcp.depended_on]
   source             = "astronomer/astronomer/kubernetes"
   version            = "1.1.20"
-  astronomer_version = "0.11.0-alpha.12"
+  astronomer_version = "0.11.0-rc.1"
 
   db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
