@@ -66,7 +66,7 @@ elasticsearch:
       requests:
         cpu:     100m
         memory:  2Gi
-    replicas: 12
+    replicas: 14
 astronomer:
   images:
     registry:
@@ -277,7 +277,7 @@ kubed:
 prometheus:
   replicas: 2
   persistence:
-    size: "500Gi"
+    size: "550Gi"
   # We bill ~30d, so let's retain all metrics for
   # 30d plus a grace period of 5 days
   # This will require more memory for some queries,
