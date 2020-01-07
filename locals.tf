@@ -19,14 +19,14 @@ global:
               values:
               - "false"
     tolerations:
-      - key: "platform"
+      - key: "astronomer.io/platform"
         operator: "Equal"
         value: "true"
         effect: "NoSchedule"
 %{if var.enable_gvisor == true}
     tolerations:
     - effect: NoSchedule
-      key: sandbox.gke.io/runtime
+      key: "sandbox.gke.io/runtime"
       operator: Equal
       value: gvisor
 %{endif}
@@ -185,29 +185,22 @@ astronomer:
                     operator: In
                     values:
                     - "true"
-%{if var.enable_gvisor == true}
+%{if var.create_dynamic_pods_nodepool == true}
+                  - key: "astronomer.io/dynamic-pods"
+                    operator: NotIn
+                    values:
+                    - "true"
+%{endif}
           tolerations:
           - effect: NoSchedule
-            key: sandbox.gke.io/runtime
+            key: "astronomer.io/multi-tenant-non-dynamic"
+            operator: Equal
+            value: "true"
+%{if var.enable_gvisor == true}
+          - effect: NoSchedule
+            key: "sandbox.gke.io/runtime"
             operator: Equal
             value: gvisor
-%{endif}
-%{if var.create_dynamic_pods_nodepool == true}
-          podMutation:
-            tolerations:
-              - key: "dynamic-pods"
-                operator: "Equal"
-                value: "true"
-                effect: "NoSchedule"
-            affinity:
-              nodeAffinity:
-                requiredDuringSchedulingIgnoredDuringExecution:
-                  nodeSelectorTerms:
-                    - matchExpressions:
-                        - key: "astronomer.io/dynamic-pods"
-                          operator: In
-                          values:
-                            - "true"
 %{endif}
 %{if module.gcp.gcp_default_service_account_key != ""}
   registry:
@@ -284,7 +277,7 @@ prometheus:
   # This will require more memory for some queries,
   # so we will up the resource limits as well.
   retention: "35d"
-  ingressNetworkPolicyExtraSelectors: 
+  ingressNetworkPolicyExtraSelectors:
     - namespaceSelector: {}
       podSelector:
         matchLabels:
@@ -310,13 +303,11 @@ fluentd:
                 operator: In
                 values:
                   - "true"
-%{if var.create_dynamic_pods_nodepool == true}
   tolerations:
     - effect: NoSchedule
-      key: dynamic-pods
+      key: "astronomer.io/multi-tenant-non-dynamic"
       operator: Equal
       value: "true"
-%{endif}
 EOF
 
   extra_istio_helm_values = <<EOF
