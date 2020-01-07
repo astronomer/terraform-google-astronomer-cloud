@@ -82,6 +82,8 @@ astronomer:
         value: "${var.stripe_pk}"
   %{endif}
   houston:
+    expireDeployments:
+      enabled: true
     env:
       - name: ANALYTICS__ENABLED
         value: "true"
