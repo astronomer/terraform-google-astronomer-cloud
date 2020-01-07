@@ -158,7 +158,7 @@ variable "enable_knative" {
 
 variable "create_dynamic_pods_nodepool" {
   type        = bool
-  default     = false
+  default     = true
   description = "If true, creates a NodePool for the pods spun up using KubernetesPodsOperator or KubernetesExecutor"
 }
 
