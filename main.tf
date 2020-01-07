@@ -43,7 +43,7 @@ module "gcp" {
   platform_node_pool_taints = [
     {
       effect = "NO_SCHEDULE"
-      key    = "platform"
+      key    = "astronomer.io/platform"
       value  = "true"
     },
   ]
@@ -51,10 +51,10 @@ module "gcp" {
   # This pool will be used to direct all dynamic KubernetesExecutor and
   # KubernetesPodOperator pods
   create_dynamic_pods_nodepool = var.create_dynamic_pods_nodepool
-  dp_node_pool_taints = [
+  mt_node_pool_taints = [
     {
       effect = "NO_SCHEDULE"
-      key    = "dynamic-pods"
+      key    = "astronomer.io/multi-tenant-non-dynamic"
       value  = "true"
     },
   ]
