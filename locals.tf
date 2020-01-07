@@ -75,6 +75,8 @@ astronomer:
         value: "${var.stripe_pk}"
   %{endif}
   houston:
+    expireDeployments:
+      enabled: true
     env:
       - name: ANALYTICS__ENABLED
         value: "true"
@@ -151,6 +153,12 @@ astronomer:
         %{endif}
         astroUnit:
           price: 10
+        chart:
+          version: 0.11.0-rc.3
+        images:
+          - version: 1.10.5
+            channel: stable
+            tag: 1.10.5-alpine3.10-onbuild
         helm:
           webserver:
             initialDelaySeconds: 15
