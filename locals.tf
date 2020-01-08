@@ -49,6 +49,7 @@ nginx:
 elasticsearch:
   client:
     replicas: 4
+    resources:
       limits:
         cpu: 3
         memory: 4Gi
