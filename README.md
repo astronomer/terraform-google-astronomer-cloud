@@ -68,7 +68,6 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
     
     This bash script would run all the necessary Terraform steps.
     
-
 ## Destroy Deployment
 
 1. Run the following command:
