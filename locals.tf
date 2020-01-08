@@ -164,7 +164,7 @@ astronomer:
         astroUnit:
           price: 10
         chart:
-          version: 0.11.0-rc.3
+          version: 0.11.0-rc.4
         images:
           - version: 1.10.7
             channel: stable
