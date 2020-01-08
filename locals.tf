@@ -48,8 +48,15 @@ nginx:
   perserveSourceIP: true
 elasticsearch:
   client:
+    replicas: 4
+      limits:
+        cpu: 3
+        memory: 4Gi
+      requests:
+        cpu: 1
+        memory: 2Gi
     podAnnotations:
-      sidecar.istio.io/proxyCPU: 1500m
+      sidecar.istio.io/proxyCPU: 1000m
   data:
     heapMemory: 2g
     resources:
