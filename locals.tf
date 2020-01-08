@@ -81,6 +81,8 @@ astronomer:
       - name: STRIPE_PK
         value: "${var.stripe_pk}"
   %{endif}
+  norbit:
+    enabled: true
   houston:
     expireDeployments:
       enabled: true
@@ -163,6 +165,9 @@ astronomer:
         chart:
           version: 0.11.0-rc.3
         images:
+          - version: 1.10.7
+            channel: stable
+            tag: 1.10.7-alpine3.10-onbuild
           - version: 1.10.5
             channel: stable
             tag: 1.10.5-alpine3.10-onbuild
