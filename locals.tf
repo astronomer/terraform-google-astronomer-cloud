@@ -85,7 +85,12 @@ astronomer:
   norbit:
     enabled: true
   houston:
+    upgradeDeployments:
+      enabled: true
     expireDeployments:
+      enabled: true
+      dryRun: true
+    cleanupDeployments:
       enabled: true
       dryRun: true
     env:
