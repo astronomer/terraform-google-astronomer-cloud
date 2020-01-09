@@ -87,6 +87,7 @@ astronomer:
   houston:
     expireDeployments:
       enabled: true
+      dryRun: true
     env:
       - name: ANALYTICS__ENABLED
         value: "true"
