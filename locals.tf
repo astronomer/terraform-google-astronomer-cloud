@@ -70,10 +70,6 @@ elasticsearch:
     replicas: 14
 astronomer:
   images:
-    registry:
-      repository: registry
-      tag: 2.7.1
-      pullPolicy: IfNotPresent
     orbit:
       repository: astronomerinc/ap-orbit-ui
       tag: release-0.11
