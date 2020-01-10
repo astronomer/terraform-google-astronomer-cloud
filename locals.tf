@@ -67,7 +67,7 @@ elasticsearch:
       requests:
         cpu:     100m
         memory:  2Gi
-    replicas: 14
+    replicas: 4
 astronomer:
   images:
     orbit:
