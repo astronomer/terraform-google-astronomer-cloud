@@ -297,7 +297,7 @@ kubed:
 prometheus:
   replicas: 2
   persistence:
-    size: "550Gi"
+    size: "600Gi"
   # We bill ~30d, so let's retain all metrics for
   # 30d plus a grace period of 5 days
   # This will require more memory for some queries,
