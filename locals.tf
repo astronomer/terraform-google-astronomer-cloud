@@ -74,6 +74,14 @@ astronomer:
       repository: registry
       tag: 2.7.1
       pullPolicy: IfNotPresent
+    orbit:
+      repository: astronomerinc/ap-orbit-ui
+      tag: release-0.11
+      pullPolicy: Always
+    houston:
+      repository: astronomerinc/ap-houston-api
+      tag: release-0.11
+      pullPolicy: Always
   orbit:
     env:
       - name: ANALYTICS_TRACKING_ID
@@ -102,9 +110,6 @@ astronomer:
         value: "true"
     %{endif}
     config:
-      cors:
-        allowedOrigins:
-          - https://orbit-dev.netlify.com/
     %{if var.public_signups}
       publicSignups: true
     %{else}
