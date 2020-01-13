@@ -88,6 +88,9 @@ astronomer:
   %{endif}
   norbit:
     enabled: true
+    env:
+      - name: APP_ENABLE_ERROR_REPORTING
+        value: true
   houston:
     upgradeDeployments:
       enabled: true
