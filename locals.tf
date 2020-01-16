@@ -91,6 +91,10 @@ astronomer:
     env:
       - name: APP_ENABLE_ERROR_REPORTING
         value: true
+  %{if var.stripe_secret_key != "" && var.stripe_pk != ""}
+      - name: STRIPE_PK
+        value: "${var.stripe_pk}"
+  %{endif}
   houston:
     upgradeDeployments:
       enabled: true
