@@ -96,14 +96,16 @@ astronomer:
         value: "${var.stripe_pk}"
   %{endif}
   houston:
-    upgradeDeployments:
-      enabled: true
     expireDeployments:
       enabled: true
       dryRun: true
+      canary: true
     cleanupDeployments:
-      enabled: true
       dryRun: true
+      canary: true
+    upgradeDeployments:
+      dryRun: true
+      canary: true
     env:
       - name: ANALYTICS__ENABLED
         value: "true"
