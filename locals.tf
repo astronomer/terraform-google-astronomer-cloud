@@ -69,15 +69,6 @@ elasticsearch:
         memory:  2Gi
     replicas: 14
 astronomer:
-  images:
-    orbit:
-      repository: astronomerinc/ap-orbit-ui
-      tag: release-0.11
-      pullPolicy: Always
-    houston:
-      repository: astronomerinc/ap-houston-api
-      tag: release-0.11
-      pullPolicy: Always
   orbit:
     env:
       - name: ANALYTICS_TRACKING_ID
@@ -104,7 +95,6 @@ astronomer:
       dryRun: true
       canary: true
     upgradeDeployments:
-      dryRun: true
       canary: true
     env:
       - name: ANALYTICS__ENABLED
@@ -180,7 +170,7 @@ astronomer:
         astroUnit:
           price: 10
         chart:
-          version: 0.11.0-rc.6
+          version: 0.11.0
         images:
           - version: 1.10.7
             channel: stable
