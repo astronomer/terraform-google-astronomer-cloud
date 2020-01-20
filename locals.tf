@@ -178,8 +178,7 @@ astronomer:
           - version: 1.10.5
             channel: stable
             tag: 1.10.5-alpine3.10-onbuild
-
-            # Legacy images, remove these once everyone is upgraded to 0.11 airflow
+          # Legacy images, remove these once everyone is upgraded to 0.11 airflow
           - version: 1.10.5
             channel: stable
             tag: 0.10.0-1.10.5-onbuild
