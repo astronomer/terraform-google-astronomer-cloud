@@ -95,6 +95,7 @@ astronomer:
       dryRun: true
       canary: true
     upgradeDeployments:
+      enabled: false
       canary: true
     env:
       - name: ANALYTICS__ENABLED
