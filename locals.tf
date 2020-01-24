@@ -90,13 +90,13 @@ astronomer:
     expireDeployments:
       enabled: true
       dryRun: true
-      canary: true
+      canary: false
     cleanupDeployments:
       dryRun: true
-      canary: true
+      canary: false
     upgradeDeployments:
       enabled: true
-      canary: true
+      canary: false
     env:
       - name: ANALYTICS__ENABLED
         value: "true"
