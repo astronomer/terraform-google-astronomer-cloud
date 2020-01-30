@@ -193,6 +193,38 @@ astronomer:
             channel: stable
             tag: 0.10.3-1.10.5-onbuild
         helm:
+          pgbouncer:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 64Mi
+              limits:
+                cpu: 250m
+                memory: 256Mi
+          redis:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 64Mi
+              limits:
+                cpu: 250m
+                memory: 256Mi
+          flower:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 64Mi
+              limits:
+                cpu: 250m
+                memory: 512Mi
+          statsd:
+            resources:
+              requests:
+                cpu: 20m
+                memory: 64Mi
+              limits:
+                cpu: 1000m
+                memory: 256Mi
           webserver:
             initialDelaySeconds: 15
             timeoutSeconds: 30
