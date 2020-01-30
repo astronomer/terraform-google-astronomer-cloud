@@ -194,6 +194,7 @@ astronomer:
             tag: 0.10.3-1.10.5-onbuild
         helm:
           pgbouncer:
+            resultBackendPoolSize: 10
             resources:
               requests:
                 cpu: 20m
@@ -239,8 +240,6 @@ astronomer:
           quotas:
             requests.ephemeral-storage: "50Gi"
             limits.ephemeral-storage: "256Gi"
-          pgbouncer:
-            resultBackendPoolSize: 10
           affinity:
             nodeAffinity:
               requiredDuringSchedulingIgnoredDuringExecution:
