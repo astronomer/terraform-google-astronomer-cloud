@@ -80,7 +80,7 @@ module "system_components" {
   extra_istio_helm_values            = local.extra_istio_helm_values
   extra_googlesqlproxy_helm_values   = local.extra_googlesqlproxy_helm_values
   cloud_sql_proxy_helm_chart_version = "0.19.2"
-  istio_helm_release_version         = "1.3.0"
+  istio_helm_release_version         = "1.4.3"
   kubecost_helm_chart_version        = "1.45.1"
   tiller_version                     = var.tiller_version
   enable_velero                      = var.enable_velero
