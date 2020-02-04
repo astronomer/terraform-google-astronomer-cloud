@@ -348,7 +348,7 @@ prometheus:
   # This will require more memory for some queries,
   # so we will up the resource limits as well.
   retention: "35d"
-  ingressNetworkPolicyExtraSelectors: 
+  ingressNetworkPolicyExtraSelectors:
     - namespaceSelector: {}
       podSelector:
         matchLabels:
@@ -396,6 +396,21 @@ global:
   defaultNodeSelector:
     astronomer.io/multi-tenant: "false"
   proxy:
+    lifecycle:
+      preStop:
+       exec:
+         command:
+           - "/bin/bash"
+           - "-c"
+           - |
+              set -e
+              echo "Exit signal received, waiting for all network connections to clear..."
+              while [ $(netstat -plunt | grep tcp | grep -v envoy | grep -v pilot | wc -l | xargs) -ne 0 ]; do
+                printf "."
+                sleep 3;
+              done
+              echo "Network connections cleared, shutting down pilot..."
+              exit 0
     # https://github.com/istio/istio/issues/8247
     concurrency: 1
     # Only use sidecar for RFC1918 address space (private networks).
