@@ -171,7 +171,7 @@ astronomer:
         astroUnit:
           price: 10
         chart:
-          version: 0.11.0
+          version: 0.11.1
         images:
           - version: 1.10.7
             channel: stable
@@ -193,6 +193,34 @@ astronomer:
             channel: stable
             tag: 0.10.3-1.10.5-onbuild
         helm:
+          scheduler:
+            airflowLocalSettings: |
+              from airflow.contrib.kubernetes.pod import Pod
+              from airflow.configuration import conf
+              def pod_mutation_hook(pod: Pod):
+                # This is the default airflow-chart pod mutation hook
+                extra_labels = {
+                    "kubernetes-executor": "False",
+                    "kubernetes-pod-operator": "False"
+                }
+                if 'airflow-worker' in pod.labels.keys() or \
+                        conf.get('core', 'EXECUTOR') == "KubernetesExecutor":
+                    extra_labels["kubernetes-executor"] = "True"
+                else:
+                    extra_labels["kubernetes-pod-operator"] = "True"
+                pod.labels.update(extra_labels)
+                pod.tolerations += []
+                pod.affinity.update({})
+                # Ensure our entrypoint is respected
+                if not pod.args:
+                  pod.args = []
+                pod.args = pod.cmds + pod.args
+                pod.cmds = ["tini", "--", "/entrypoint"]
+            resources:
+              limits:
+                ephemeral-storage: "2Gi"
+              requests:
+                ephemeral-storage: "1Gi"
           pgbouncer:
             resultBackendPoolSize: 10
             resources:
