@@ -442,7 +442,11 @@ global:
               echo "Network connections cleared, shutting down pilot..."
               exit 0
     # https://github.com/istio/istio/issues/8247
-    concurrency: 1
+    # After applying the other fixes for memory,
+    # i.e. sidecar egress rules, this fix is no
+    # longer necessary, and it's better to set back
+    # to the default (2) for performance.
+    concurrency: 2
     # Only use sidecar for RFC1918 address space (private networks).
     # This will allow mesh-external traffic to leave the cluster
     # without going through a sidecar.
@@ -469,6 +473,8 @@ galley:
   replicaCount: 2
 pilot:
   autoscaleMin: 2
+security:
+  replicaCount: 2
 mixer:
   policy:
     autoscaleMin: 2
