@@ -67,7 +67,7 @@ elasticsearch:
       requests:
         cpu:     100m
         memory:  2Gi
-    replicas: 10
+    replicas: 9
 astronomer:
   orbit:
     env:
@@ -255,6 +255,8 @@ astronomer:
             failureThreshold: 60
             periodSeconds: 8
           workers:
+            keda:
+              enabled: false
             resources:
               limits:
                 ephemeral-storage: "10Gi"
