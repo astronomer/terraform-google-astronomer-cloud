@@ -216,11 +216,6 @@ astronomer:
                   pod.args = []
                 pod.args = pod.cmds + pod.args
                 pod.cmds = ["tini", "--", "/entrypoint"]
-            resources:
-              limits:
-                ephemeral-storage: "2Gi"
-              requests:
-                ephemeral-storage: "1Gi"
           pgbouncer:
             resultBackendPoolSize: 10
             resources:
