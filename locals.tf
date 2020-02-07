@@ -255,6 +255,8 @@ astronomer:
             failureThreshold: 60
             periodSeconds: 8
           workers:
+            keda:
+              enabled: false
             resources:
               limits:
                 ephemeral-storage: "10Gi"
