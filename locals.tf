@@ -67,7 +67,7 @@ elasticsearch:
       requests:
         cpu:     100m
         memory:  2Gi
-    replicas: 8
+    replicas: 7
 astronomer:
   orbit:
     env:
@@ -96,7 +96,7 @@ astronomer:
       canary: false
     upgradeDeployments:
       enabled: true
-      canary: true
+      canary: false
     env:
       - name: ANALYTICS__ENABLED
         value: "true"
