@@ -67,7 +67,7 @@ elasticsearch:
       requests:
         cpu:     100m
         memory:  2Gi
-    replicas: 9
+    replicas: 8
 astronomer:
   orbit:
     env:
@@ -193,6 +193,11 @@ astronomer:
             channel: stable
             tag: 0.10.3-1.10.5-onbuild
         helm:
+          data:
+            metadataConnection:
+              sslmode: disable
+            resultBackendConnection:
+              sslmode: disable
           scheduler:
             airflowLocalSettings: |
               from airflow.contrib.kubernetes.pod import Pod
