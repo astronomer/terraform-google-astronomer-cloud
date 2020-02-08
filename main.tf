@@ -10,6 +10,10 @@ module "gcp" {
   zonal_cluster       = var.zonal_cluster
   management_endpoint = var.management_api
 
+  # The number of GB in the platform node pool.
+  # Default is 100.
+  disk_size_platform = 200
+
   # Enables GKE Metered Billing and exports billing data to BigQuery
   enable_gke_metered_billing = var.enable_gke_metered_billing
 
