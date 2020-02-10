@@ -167,3 +167,9 @@ variable "enable_gke_metered_billing" {
   default     = true
   description = "If true, enables GKE metered billing to track costs on namespaces & label level"
 }
+
+variable "astronomer_helm_values" {
+  type        = string
+  default     = ""
+  description = "The Helm values to apply to the Astronomer platform. This yaml block will the Helm user-provided values for the Astronomer installation, if provided."
+}
