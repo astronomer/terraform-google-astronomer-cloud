@@ -1,5 +1,5 @@
 locals {
-  astronomer_helm_values = <<EOF
+  astronomer_helm_values = var.astronomer_helm_values != "" ? var.astronomer_helm_values : <<EOF
 ---
 global:
   # Base domain for all subdomains exposed through ingress
