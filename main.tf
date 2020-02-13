@@ -3,12 +3,16 @@
 module "gcp" {
   source = "astronomer/astronomer-gcp/google"
   //  source              = "../terraform-google-astronomer-gcp"
-  version             = "1.0.221"
+  version             = "1.0.223"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
   zonal_cluster       = var.zonal_cluster
   management_endpoint = var.management_api
+
+  # The number of GB in the platform node pool.
+  # Default is 100.
+  disk_size_platform = 200
 
   # Enables GKE Metered Billing and exports billing data to BigQuery
   enable_gke_metered_billing = var.enable_gke_metered_billing
