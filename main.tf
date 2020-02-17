@@ -52,6 +52,9 @@ module "gcp" {
     },
   ]
 
+  # Enable KEDA
+  webhook_ports = ["6443"]
+
   # This pool will be used to direct all dynamic KubernetesExecutor and
   # KubernetesPodOperator pods
   create_dynamic_pods_nodepool = var.create_dynamic_pods_nodepool
