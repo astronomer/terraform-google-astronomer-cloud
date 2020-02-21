@@ -3,7 +3,7 @@
 module "gcp" {
   source = "astronomer/astronomer-gcp/google"
   //  source              = "../terraform-google-astronomer-gcp"
-  version             = "1.0.223"
+  version             = "1.0.233"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
@@ -51,6 +51,9 @@ module "gcp" {
       value  = "true"
     },
   ]
+
+  # Enable KEDA
+  webhook_ports = ["6443"]
 
   # This pool will be used to direct all dynamic KubernetesExecutor and
   # KubernetesPodOperator pods
