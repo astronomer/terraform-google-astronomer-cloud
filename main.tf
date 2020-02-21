@@ -96,10 +96,17 @@ module "system_components" {
 
 # Install the Astronomer platform via a helm chart
 module "astronomer" {
-  dependencies       = [module.system_components.depended_on, module.gcp.depended_on]
-  source             = "astronomer/astronomer/kubernetes"
-  version            = "1.1.55"
-  astronomer_version = "0.11.0-astro.8"
+  dependencies = [module.system_components.depended_on, module.gcp.depended_on]
+  source       = "astronomer/astronomer/kubernetes"
+  version      = "1.1.73"
+
+  astronomer_version              = var.astronomer_version
+  astronomer_version_git_checkout = var.astronomer_version_git_checkout
+  astronomer_chart_git_repository = var.astronomer_chart_git_repository
+  astronomer_helm_chart_name      = var.astronomer_helm_chart_name
+  wait_for_helm_chart             = var.wait_for_helm_chart
+  astronomer_helm_chart_repo      = var.astronomer_helm_chart_repo
+  astronomer_helm_chart_repo_url  = var.astronomer_helm_chart_repo_url
 
   db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
   tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
