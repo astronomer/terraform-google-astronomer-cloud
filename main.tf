@@ -101,7 +101,7 @@ module "system_components" {
 module "astronomer" {
   dependencies = [module.system_components.depended_on, module.gcp.depended_on]
   source       = "astronomer/astronomer/kubernetes"
-  version      = "1.1.81"
+  version      = "1.1.83"
 
   astronomer_version              = var.astronomer_version
   astronomer_version_git_checkout = var.astronomer_version_git_checkout
