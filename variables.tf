@@ -182,7 +182,7 @@ variable "astronomer_version_git_checkout" {
 
 variable "astronomer_chart_git_repository" {
   description = "Git repository clone url, when using git clone method. This should exactly match what you would want to use with 'git clone <this variable>'. It is better to not use this and instead use just the astronomer_version variable, which will pull from the Astronomer Helm chart repository."
-  default     = "https://github.com/astronomer/helm.astronomer.io.git"
+  default     = ""
   type        = string
 }
 
