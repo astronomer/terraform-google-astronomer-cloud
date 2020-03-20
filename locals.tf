@@ -456,6 +456,8 @@ global:
         memory: 248Mi
 kiali:
   enabled: true
+tracing:
+  enabled: true
 gateways:
   istio-ingressgateway:
     enabled: false
