@@ -425,6 +425,7 @@ global:
   # ... and require it to land on that node pool.
   defaultNodeSelector:
     astronomer.io/multi-tenant: "false"
+  configRootNamespace: "istio-config"
   proxy:
     lifecycle:
       preStop:
