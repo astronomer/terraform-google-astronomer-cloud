@@ -175,17 +175,17 @@ steps:
     repo:
       - astronomer/terraform-google-astronomer-cloud
 
-- name: update_google_environment
-  image: docker:git
-  environment:
-    DEPLOY_KEY:
-      from_secret: DEPLOY_KEY_ENVIRONMENTS
-  commands:
-    - pipeline/update_stage_environment.sh
-  when:
-    event:
-      - tag
-    status:
-      - success
-    repo:
-      - astronomer/terraform-google-astronomer-cloud
+# - name: update_google_environment
+#   image: docker:git
+#   environment:
+#     DEPLOY_KEY:
+#       from_secret: DEPLOY_KEY_ENVIRONMENTS
+#   commands:
+#     - pipeline/update_stage_environment.sh
+#   when:
+#     event:
+#       - tag
+#     status:
+#       - success
+#     repo:
+#       - astronomer/terraform-google-astronomer-cloud
