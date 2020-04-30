@@ -149,8 +149,7 @@ variable "enable_gke_metered_billing" {
 
 variable "astronomer_helm_values" {
   type        = string
-  default     = ""
-  description = "The Helm values to apply to the Astronomer platform. This yaml block will the Helm user-provided values for the Astronomer installation, if provided."
+  description = "The Helm values to apply to the Astronomer platform"
 }
 
 variable "astronomer_version_git_checkout" {

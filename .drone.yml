@@ -22,7 +22,7 @@ steps:
       "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/[SERVICE-ACCOUNT-EMAIL]"
       }' > ~/account.json
-    - terraform validate -var "deployment_id=validate" -var "dns_managed_zone=validate-fake.com" -var "email=fake@mailinator.com"
+    - terraform validate -var "deployment_id=validate" -var "dns_managed_zone=validate-fake.com" -var "email=fake@mailinator.com" -var "astronomer_helm_values=''"
     - rm -rf .terraform
     - |
       for example in $(find examples -maxdepth 1 -mindepth 1 -type d); do
@@ -31,7 +31,7 @@ steps:
       echo $example
       terraform init
       terraform fmt -check=true
-      terraform validate -var "deployment_id=citest" -var "dns_managed_zone=steven-zone"
+      terraform validate -var "deployment_id=citest" -var "dns_managed_zone=steven-zone" -var "astronomer_helm_values=''"
       rm providers.tf
       rm -rf .terraform
       cd -
@@ -56,7 +56,7 @@ steps:
 #       - push
 #     branch:
 #       - master
-# 
+#
 # # TODO: expand testing
 # - name: system_test
 #   image: sjmiller609/helm-kubectl-terraform:latest
@@ -70,7 +70,7 @@ steps:
 #       - push
 #     branch:
 #       - master
-# 
+#
 # - name: from_scratch_cleanup
 #   image: sjmiller609/helm-kubectl-terraform:latest
 #   environment:
@@ -86,7 +86,7 @@ steps:
 #       - success
 #     branch:
 #       - master
-# 
+#
 # # It helps to try the cleanup again if it fails
 # # for some reason the first time.
 # # A tagged release will not happen if the destroy
