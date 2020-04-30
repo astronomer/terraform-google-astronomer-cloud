@@ -3,16 +3,12 @@
 module "gcp" {
   source = "astronomer/astronomer-gcp/google"
   //  source              = "../terraform-google-astronomer-gcp"
-  version             = "1.0.239"
+  version             = "1.0.240"
   email               = var.email
   deployment_id       = var.deployment_id
   dns_managed_zone    = var.dns_managed_zone
   zonal_cluster       = var.zonal_cluster
   management_endpoint = var.management_api
-
-  # The number of GB in the platform node pool.
-  # Default is 100.
-  disk_size_platform = 200
 
   # Enables GKE Metered Billing and exports billing data to BigQuery
   enable_gke_metered_billing = var.enable_gke_metered_billing
@@ -20,9 +16,6 @@ module "gcp" {
   # How long to wait after deploying GKE.
   # This is needed GKE-managed services to stabilize.
   wait_for = "430"
-  # this setting is for how to configure the multi-tenant
-  # node pool
-  enable_gvisor = var.enable_gvisor
 
   # Kube version minimum
   kube_version_gke = var.kube_version_gke
@@ -34,37 +27,41 @@ module "gcp" {
   # them instead of asking for a Let's Encrypt cert.
   lets_encrypt = var.lets_encrypt
 
-  # Instance sizes
-  machine_type          = var.worker_node_size
-  machine_type_platform = "n1-standard-16"
-  max_node_count        = var.max_worker_node_count
-  cloud_sql_tier        = var.db_instance_size
-  db_max_connections    = 2000
-
-  # Only allow platform pods to created on this NodePool by using the below taint
-  # Unless pods has the matching key,value for the taint the pods would not be
-  # scheduled
-  platform_node_pool_taints = [
-    {
-      effect = "NO_SCHEDULE"
-      key    = "platform"
-      value  = "true"
-    },
-  ]
+  cloud_sql_tier     = var.db_instance_size
+  db_max_connections = 2000
 
   # Enable KEDA
   webhook_ports = ["6443"]
 
-  # This pool will be used to direct all dynamic KubernetesExecutor and
-  # KubernetesPodOperator pods
-  create_dynamic_pods_nodepool = var.create_dynamic_pods_nodepool
-  dp_node_pool_taints = [
-    {
-      effect = "NO_SCHEDULE"
-      key    = "dynamic-pods"
-      value  = "true"
-    },
-  ]
+  ## Node Pool configurations
+  enable_blue_platform_node_pool    = var.enable_blue_platform_node_pool
+  machine_type_platform_blue        = var.machine_type_platform_blue
+  disk_size_platform_blue           = var.disk_size_platform_blue
+  max_node_count_platform_blue      = var.max_node_count_platform_blue
+  platform_node_pool_taints_blue    = var.platform_node_pool_taints_blue
+  enable_green_platform_node_pool   = var.enable_green_platform_node_pool
+  machine_type_platform_green       = var.machine_type_platform_green
+  disk_size_platform_green          = var.disk_size_platform_green
+  max_node_count_platform_green     = var.max_node_count_platform_green
+  platform_node_pool_taints_green   = var.platform_node_pool_taints_green
+  enable_blue_mt_node_pool          = var.enable_blue_mt_node_pool
+  machine_type_multi_tenant_blue    = var.machine_type_multi_tenant_blue
+  disk_size_multi_tenant_blue       = var.disk_size_multi_tenant_blue
+  max_node_count_multi_tenant_blue  = var.max_node_count_multi_tenant_blue
+  mt_node_pool_taints_blue          = var.mt_node_pool_taints_blue
+  enable_gvisor_blue                = var.enable_gvisor_blue
+  enable_green_mt_node_pool         = var.enable_green_mt_node_pool
+  machine_type_multi_tenant_green   = var.machine_type_multi_tenant_green
+  disk_size_multi_tenant_green      = var.disk_size_multi_tenant_green
+  max_node_count_multi_tenant_green = var.max_node_count_multi_tenant_green
+  mt_node_pool_taints_green         = var.mt_node_pool_taints_green
+  enable_gvisor_green               = var.enable_gvisor_green
+  create_dynamic_pods_nodepool      = var.create_dynamic_pods_nodepool
+  disk_size_dynamic                 = var.disk_size_dynamic
+  dynamic_node_pool_taints          = var.dynamic_node_pool_taints
+  max_node_count_dynamic            = var.max_node_count_dynamic
+  enable_gvisor_dynamic             = var.enable_gvisor_dynamic
+  machine_type_dynamic              = var.machine_type_dynamic
 }
 
 # Install tiller, which is the server-side component
