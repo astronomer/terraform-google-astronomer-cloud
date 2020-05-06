@@ -206,6 +206,12 @@ variable "enable_blue_platform_node_pool" {
   description = "Turn on the blue platform node pool"
 }
 
+variable "blue_platform_np_initial_node_count" {
+  type        = number
+  default     = 1
+  description = "Initial node count for the blue platform node pool"
+}
+
 variable "machine_type_platform_blue" {
   default     = "n1-standard-16"
   type        = string
@@ -240,6 +246,12 @@ variable "enable_green_platform_node_pool" {
   type        = bool
   default     = false
   description = "Turn on the green platform node pool"
+}
+
+variable "green_platform_np_initial_node_count" {
+  type        = number
+  default     = 1
+  description = "Initial node count for the green platform node pool"
 }
 
 variable "machine_type_platform_green" {
@@ -280,6 +292,12 @@ variable "enable_blue_mt_node_pool" {
   description = "Turn on the blue multi-tenant node pool"
 }
 
+variable "blue_mt_np_initial_node_count" {
+  type        = number
+  default     = 1
+  description = "Initial node count for the blue multi-tenant node pool"
+}
+
 variable "machine_type_multi_tenant_blue" {
   default     = "n1-standard-16"
   description = "The GCP machine type for GKE worker nodes running multi-tenant workloads"
@@ -316,6 +334,12 @@ variable "enable_green_mt_node_pool" {
   description = "Turn on the green multi-tenant node pool"
 }
 
+variable "green_mt_np_initial_node_count" {
+  type        = number
+  default     = 1
+  description = "Initial node count for the green multi-tenant node pool"
+}
+
 variable "machine_type_multi_tenant_green" {
   default     = "n1-standard-16"
   description = "The GCP machine type for GKE worker nodes running multi-tenant workloads"
@@ -350,6 +374,12 @@ variable "create_dynamic_pods_nodepool" {
   type        = bool
   default     = false
   description = "If true, creates a NodePool for the pods spun up using KubernetesPodsOperator or KubernetesExecutor"
+}
+
+variable "dynamic_np_initial_node_count" {
+  type        = number
+  default     = 1
+  description = "Initial node count for the dynamic node pool"
 }
 
 variable "disk_size_dynamic" {
