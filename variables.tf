@@ -414,3 +414,9 @@ variable "machine_type_dynamic" {
   default     = "n1-standard-16"
   description = "The GCP machine type for the bastion"
 }
+
+variable "install_astronomer_helm_chart" {
+  type        = bool
+  default     = true
+  description = "When false, this module skips installing the Astronomer helm chart. This is useful if you want to manage Astronomer outside of Terraform"
+}
