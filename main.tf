@@ -103,8 +103,9 @@ module "system_components" {
 module "astronomer" {
   dependencies = [module.system_components.depended_on, module.gcp.depended_on]
   source       = "astronomer/astronomer/kubernetes"
-  version      = "1.1.84"
+  version      = "1.1.89"
 
+  install_astronomer_helm_chart   = var.install_astronomer_helm_chart
   astronomer_version              = var.astronomer_version
   astronomer_version_git_checkout = var.astronomer_version_git_checkout
   astronomer_chart_git_repository = var.astronomer_chart_git_repository
