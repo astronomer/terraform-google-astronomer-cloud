@@ -77,7 +77,7 @@ module "system_components" {
   source       = "astronomer/astronomer-system-components/kubernetes"
   version      = "0.1.19"
   //  source                       = "../terraform-kubernetes-astronomer-system-components"
-  enable_cloud_sql_proxy             = true
+  enable_cloud_sql_proxy             = var.enable_cloud_sql_proxy
   enable_istio                       = var.enable_istio
   enable_knative                     = var.enable_knative
   enable_kubecost                    = var.enable_kubecost

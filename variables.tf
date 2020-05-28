@@ -420,3 +420,8 @@ variable "install_astronomer_helm_chart" {
   default     = true
   description = "When false, this module skips installing the Astronomer helm chart. This is useful if you want to manage Astronomer outside of Terraform"
 }
+
+variable "enable_cloud_sql_proxy" {
+  default = true
+  type    = bool
+}
