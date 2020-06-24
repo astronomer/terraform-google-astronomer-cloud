@@ -1,14 +1,19 @@
 # Deploy all the cloud-specific underlying infrastructure.
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
-  source = "astronomer/astronomer-gcp/google"
-  //  source              = "../terraform-google-astronomer-gcp"
-  version             = "1.0.256"
-  email               = var.email
-  deployment_id       = var.deployment_id
-  dns_managed_zone    = var.dns_managed_zone
-  zonal_cluster       = var.zonal_cluster
-  management_endpoint = var.management_api
+
+  source                  = "astronomer/astronomer-gcp/google"
+  version                 = "1.0.263"
+  email                   = var.email
+  deployment_id           = var.deployment_id
+  dns_managed_zone        = var.dns_managed_zone
+  zonal_cluster           = var.zonal_cluster
+  management_endpoint     = var.management_api
+  kube_api_whitelist_cidr = var.kube_api_whitelist_cidr
+
+  enable_spotinist = var.enable_spotinist
+
+  pod_security_policy_enabled = var.pod_security_policy_enabled
 
   # Enables GKE Metered Billing and exports billing data to BigQuery
   enable_gke_metered_billing = var.enable_gke_metered_billing
@@ -74,9 +79,10 @@ module "gcp" {
 # Install Istio service mesh via helm charts.
 module "system_components" {
   dependencies = [module.gcp.depended_on]
-  source       = "astronomer/astronomer-system-components/kubernetes"
-  version      = "0.1.19"
-  //  source                       = "../terraform-kubernetes-astronomer-system-components"
+
+  source  = "astronomer/astronomer-system-components/kubernetes"
+  version = "0.1.19"
+
   enable_cloud_sql_proxy             = var.enable_cloud_sql_proxy
   enable_istio                       = var.enable_istio
   enable_knative                     = var.enable_knative
@@ -102,8 +108,9 @@ module "system_components" {
 # Install the Astronomer platform via a helm chart
 module "astronomer" {
   dependencies = [module.system_components.depended_on, module.gcp.depended_on]
-  source       = "astronomer/astronomer/kubernetes"
-  version      = "1.1.89"
+
+  source  = "astronomer/astronomer/kubernetes"
+  version = "1.1.90"
 
   install_astronomer_helm_chart   = var.install_astronomer_helm_chart
   astronomer_version              = var.astronomer_version

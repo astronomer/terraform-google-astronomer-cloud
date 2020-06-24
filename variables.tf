@@ -316,7 +316,7 @@ variable "max_node_count_multi_tenant_blue" {
 
 variable "mt_node_pool_taints_blue" {
   description = "Taints to apply to the Multi-Tenant Node Pool "
-  type        = "list"
+  type        = list
   default     = []
 }
 
@@ -358,7 +358,7 @@ variable "max_node_count_multi_tenant_green" {
 
 variable "mt_node_pool_taints_green" {
   description = "Taints to apply to the Multi-Tenant Node Pool"
-  type        = "list"
+  type        = list
   default     = []
 }
 
@@ -390,7 +390,7 @@ variable "disk_size_dynamic" {
 
 variable "dynamic_node_pool_taints" {
   description = "Taints to apply to the dynamic node pool "
-  type        = "list"
+  type        = list
   default = [{
     effect = "NO_SCHEDULE"
     key    = "dynamic-pods"
@@ -424,4 +424,22 @@ variable "install_astronomer_helm_chart" {
 variable "enable_cloud_sql_proxy" {
   default = true
   type    = bool
+}
+
+variable "kube_api_whitelist_cidr" {
+  default     = ""
+  type        = string
+  description = "If not provided, will whitelist only the calling IP, otherwise provide this CIDR block. This is ignore if var.management_endpoint is not set to 'public'"
+}
+
+variable "pod_security_policy_enabled" {
+  default     = false
+  type        = bool
+  description = "Turn on pod security policies in the cluster"
+}
+
+variable "enable_spotinist" {
+  default     = false
+  type        = bool
+  description = "Use Spotinist to run nodes"
 }
