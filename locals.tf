@@ -43,6 +43,8 @@ global:
       limits:
         cpu: 400m
         memory: 248Mi
+istio_cni:
+  enabled: true
 kiali:
   enabled: true
 tracing:
