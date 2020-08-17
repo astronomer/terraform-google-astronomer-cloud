@@ -83,6 +83,7 @@ module "system_components" {
   source  = "astronomer/astronomer-system-components/kubernetes"
   version = "0.1.19"
 
+  astronomer_namespace               = var.astronomer_namespace
   enable_cloud_sql_proxy             = var.enable_cloud_sql_proxy
   enable_istio                       = var.enable_istio
   enable_knative                     = var.enable_knative
@@ -112,6 +113,7 @@ module "astronomer" {
   source  = "astronomer/astronomer/kubernetes"
   version = "1.1.90"
 
+  astronomer_namespace            = var.astronomer_namespace
   install_astronomer_helm_chart   = var.install_astronomer_helm_chart
   astronomer_version              = var.astronomer_version
   astronomer_version_git_checkout = var.astronomer_version_git_checkout
