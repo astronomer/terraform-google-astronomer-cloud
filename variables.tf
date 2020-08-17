@@ -443,3 +443,9 @@ variable "enable_spotinist" {
   type        = bool
   description = "Use Spotinist to run nodes"
 }
+
+variable "astronomer_namespace" {
+  default     = "astronomer"
+  type        = string
+  description = "The namespace that will be created and Astronomer will be installed"
+}

@@ -4,7 +4,7 @@ name: terraform-google-astronomer-cloud
 steps:
 
 - name: lint
-  image: hashicorp/terraform:light
+  image: hashicorp/terraform:0.12.26
   commands:
     - cp providers.tf.example providers.tf
     - terraform init
