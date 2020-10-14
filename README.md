@@ -22,10 +22,10 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
     ```
 
 1. Create Terraform Variables file (`terraform.tfvars`):
-    
+
     A sample `terraform.tfvars.sample` file is provided in the repo.
     You can remove `.sample` from the filename and update the values based on your environment.
-    
+
     Example:
     ```
     email            = "kaxil@astronomer.io"
@@ -35,10 +35,10 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
     ```
 
 1. Copy `providers.tf.example` & rename it to `providers.tf` and replace `PROJECT` with your GCP Project ID:
-	
+
 	```bash
 	cp providers.tf.example providers.tf
-	
+
 	export PROJECT=GCP_PROJECT_ID
 	sed -i "s/PROJECT/$PROJECT/g" providers.tf
 	```
@@ -53,21 +53,21 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
 	sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
 	sed -i "s/BUCKET/$STATE_BUCKET/g" backend.tf
 	```
-	
+
 1. Run the `deploy.sh` bash script:
 
     ```bash
     bash deploy.sh terraform.tfvars
     ```
-    
+
     OR
-    
+
     ```bash
     ./deploy.sh terraform.tfvars
     ```
-    
+
     This bash script would run all the necessary Terraform steps.
-    
+
 ## Destroy Deployment
 
 1. Run the following command:
