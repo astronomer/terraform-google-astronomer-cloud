@@ -130,6 +130,12 @@ variable "kube_version_gke" {
   description = "The kubernetes version to use in GKE"
 }
 
+variable "gke_release_channel" {
+  default     = "REGULAR"
+  type        = string
+  description = "The GKE Release channel to use. Blank for none"
+}
+
 variable "tiller_version" {
   default     = "2.16.1"
   description = "The version of tiller to install"

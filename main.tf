@@ -25,6 +25,9 @@ module "gcp" {
   # Kube version minimum
   kube_version_gke = var.kube_version_gke
 
+  # GKE Release channel
+  gke_release_channel = var.gke_release_channel
+
   # don't create A record - we intend to do so manually.
   do_not_create_a_record = var.do_not_create_a_record
 
