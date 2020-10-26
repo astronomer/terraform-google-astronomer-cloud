@@ -83,7 +83,7 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
 
- source = "github.com/astronomer/terraform-kubernetes-astronomer?ref=gke-channels"
+ source = "github.com/astronomer/terraform-kubernetes-astronomer-system-components"
 
   astronomer_namespace               = var.astronomer_namespace
   enable_cloud_sql_proxy             = var.enable_cloud_sql_proxy
