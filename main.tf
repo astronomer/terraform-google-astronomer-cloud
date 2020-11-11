@@ -112,8 +112,6 @@ module "system_components" {
 module "astronomer" {
   dependencies = [module.system_components.depended_on, module.gcp.depended_on]
 
-  #source  = "astronomer/astronomer/kubernetes"
-  #version = "1.1.90"
   source = "github.com/astronomer/terraform-kubernetes-astronomer?ref=gke-channels"
 
   astronomer_namespace            = var.astronomer_namespace
@@ -126,7 +124,7 @@ module "astronomer" {
   astronomer_helm_chart_repo      = var.astronomer_helm_chart_repo
   astronomer_helm_chart_repo_url  = var.astronomer_helm_chart_repo_url
 
-  db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
+  db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.${var.astronomer_namespace}:5432"
   # If var.tls_cert is an empty string then the result is "var.tls_cert", 
   # but otherwise it is the actual value of var.tls_cert.
   tls_cert = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
