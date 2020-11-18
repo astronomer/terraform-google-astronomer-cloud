@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
 
-  source =  "github.com/astronomer/terraform-google-astronomer-gcp?ref=tommy-gke-channels"
+  source =  "github.com/astronomer/terraform-google-astronomer-gcp?ref=gke-channels"
   
   email                   = var.email
   deployment_id           = var.deployment_id
