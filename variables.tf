@@ -126,7 +126,7 @@ variable "enable_velero" {
 
 # https://cloud.google.com/kubernetes-engine/docs/release-notes-regular
 variable "kube_version_gke" {
-  default     = "1.14.6-gke.2"
+  default     = "1.17.13-gke.2001"
   description = "The kubernetes version to use in GKE"
 }
 
