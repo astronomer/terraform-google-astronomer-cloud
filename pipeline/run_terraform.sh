@@ -52,8 +52,8 @@ if [ $DESTROY -eq 1 ]; then
     set +e
 
     # whitelist our current IP for kube management API
-    gcloud container clusters update $DEPLOYMENT_ID-cluster --enable-master-authorized-networks --master-authorized-networks="$(curl icanhazip.com)/32" --zone=us-east4-a
-    
+    gcloud container clusters update $DEPLOYMENT_ID-cluster --enable-master-authorized-networks --master-authorized-networks="$(curl -sS https://api.ipify.org)/32" --zone=us-east4-a
+
     # copy the kubeconfig from the terraform state
     terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
     chmod 755 kubeconfig
