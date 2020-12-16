@@ -2,8 +2,8 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
 
-  source =  "github.com/astronomer/terraform-google-astronomer-gcp?ref=gke-channels"
-  
+  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=gke-channels"
+
   email                   = var.email
   deployment_id           = var.deployment_id
   dns_managed_zone        = var.dns_managed_zone
@@ -83,7 +83,7 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
 
- source = "github.com/astronomer/terraform-kubernetes-astronomer-system-components"
+  source = "github.com/astronomer/terraform-kubernetes-astronomer-system-components"
 
   astronomer_namespace               = var.astronomer_namespace
   enable_cloud_sql_proxy             = var.enable_cloud_sql_proxy
@@ -125,7 +125,7 @@ module "astronomer" {
   astronomer_helm_chart_repo_url  = var.astronomer_helm_chart_repo_url
 
   db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.${var.astronomer_namespace}:5432"
-  # If var.tls_cert is an empty string then the result is "var.tls_cert", 
+  # If var.tls_cert is an empty string then the result is "var.tls_cert",
   # but otherwise it is the actual value of var.tls_cert.
   tls_cert = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
   tls_key  = var.tls_key == "" ? module.gcp.tls_key : var.tls_key
