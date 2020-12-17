@@ -238,7 +238,7 @@ variable "max_node_count_platform_blue" {
 
 variable "platform_node_pool_taints_blue" {
   description = "Taints to apply to the platform node pool "
-  type        = list(map)
+  type        = list(map(string))
   default = [{
     effect = "NO_SCHEDULE"
     key    = "platform"
@@ -281,7 +281,7 @@ variable "max_node_count_platform_green" {
 
 variable "platform_node_pool_taints_green" {
   description = "Taints to apply to the Platform Node Pool "
-  type        = list(map)
+  type        = list(map(string))
   default = [{
     effect = "NO_SCHEDULE"
     key    = "platform"
@@ -322,7 +322,7 @@ variable "max_node_count_multi_tenant_blue" {
 
 variable "mt_node_pool_taints_blue" {
   description = "Taints to apply to the Multi-Tenant Node Pool "
-  type        = list(map)
+  type        = list(map(string))
   default     = []
 }
 
@@ -364,7 +364,7 @@ variable "max_node_count_multi_tenant_green" {
 
 variable "mt_node_pool_taints_green" {
   description = "Taints to apply to the Multi-Tenant Node Pool"
-  type        = list(map)
+  type        = list(map(string))
   default     = []
 }
 
@@ -396,7 +396,7 @@ variable "disk_size_dynamic" {
 
 variable "dynamic_node_pool_taints" {
   description = "Taints to apply to the dynamic node pool "
-  type        = list(map)
+  type        = list(map(string))
   default = [{
     effect = "NO_SCHEDULE"
     key    = "dynamic-pods"
@@ -452,7 +452,7 @@ variable "max_node_count_dynamic_blue" {
 
 variable "dynamic_blue_node_pool_taints" {
   description = "Taints to apply to the blue dynamic node pool"
-  type        = list(map)
+  type        = list(map(string))
   default = [{
     effect = "NO_SCHEDULE"
     key    = "dynamic-pods"
@@ -498,7 +498,7 @@ variable "max_node_count_dynamic_green" {
 
 variable "dynamic_green_node_pool_taints" {
   description = "Taints to apply to the green dynamic node pool"
-  type        = list(map)
+  type        = list(map(string))
   default = [{
     effect = "NO_SCHEDULE"
     key    = "dynamic-pods"
