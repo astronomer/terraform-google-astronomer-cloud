@@ -452,7 +452,7 @@ variable "max_node_count_dynamic_blue" {
 
 variable "dynamic_blue_node_pool_taints" {
   description = "Taints to apply to the blue dynamic node pool"
-  type        = list(string)
+  type        = list(any)
   default = [{
     effect = "NO_SCHEDULE"
     key    = "dynamic-pods"
@@ -498,7 +498,7 @@ variable "max_node_count_dynamic_green" {
 
 variable "dynamic_green_node_pool_taints" {
   description = "Taints to apply to the green dynamic node pool"
-  type        = list(string)
+  type        = list(any)
   default = [{
     effect = "NO_SCHEDULE"
     key    = "dynamic-pods"
