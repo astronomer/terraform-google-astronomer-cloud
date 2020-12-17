@@ -75,6 +75,20 @@ module "gcp" {
   max_node_count_dynamic               = var.max_node_count_dynamic
   enable_gvisor_dynamic                = var.enable_gvisor_dynamic
   machine_type_dynamic                 = var.machine_type_dynamic
+  enable_dynamic_blue_node_pool        = var.enable_dynamic_blue_node_pool
+  dynamic_blue_np_initial_node_count   = var.dynamic_blue_np_initial_node_count
+  machine_type_dynamic_blue            = var.machine_type_dynamic_blue
+  disk_size_dynamic_blue               = var.disk_size_dynamic_blue
+  max_node_count_dynamic_blue          = var.max_node_count_dynamic_blue
+  dynamic_blue_node_pool_taints        = var.dynamic_blue_node_pool_taints
+  enable_gvisor_dynamic_blue           = var.enable_gvisor_dynamic_blue
+  enable_dynamic_green_node_pool       = var.enable_dynamic_green_node_pool
+  dynamic_green_np_initial_node_count  = var.dynamic_green_np_initial_node_count
+  machine_type_dynamic_green           = var.machine_type_dynamic_green
+  disk_size_dynamic_green              = var.disk_size_dynamic_green
+  max_node_count_dynamic_green         = var.max_node_count_dynamic_green
+  dynamic_green_node_pool_taints       = var.dynamic_green_node_pool_taints
+  enable_gvisor_dynamic_green          = var.enable_gvisor_dynamic_green
 }
 
 # Install tiller, which is the server-side component
