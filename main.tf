@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
 
-  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=add-disk-type-as-parameter"
+  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=add-disk-type-as-parameter-from-1_1_0"
 
   email                   = var.email
   deployment_id           = var.deployment_id
