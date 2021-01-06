@@ -560,3 +560,9 @@ variable "astronomer_namespace" {
   type        = string
   description = "The namespace that will be created and Astronomer will be installed"
 }
+
+variable "natgateway_external_ip_list" {
+  default     = []
+  type        = list
+  description = "this list is not actually of IPs, but of google URIs for the IP resource. example: https://www.googleapis.com/compute/v1/projects/astronomer-cloud-dev-236021/regions/us-east4/addresses/dev-nat-external-address-0"
+}
