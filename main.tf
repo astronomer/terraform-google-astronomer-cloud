@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
 
-  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=egress-ip-test"
+  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=1.1.3"
 
   email                   = var.email
   deployment_id           = var.deployment_id
