@@ -560,3 +560,8 @@ variable "astronomer_namespace" {
   type        = string
   description = "The namespace that will be created and Astronomer will be installed"
 }
+
+variable "natgateway_external_ip_list" {
+  type        = list
+  description = "list of ips for the egress nat gateway to use (use if you have manually created these outside terraform)"
+}

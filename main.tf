@@ -2,7 +2,7 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
 
-  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=1.1.2"
+  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=egress-ip-test"
 
   email                   = var.email
   deployment_id           = var.deployment_id
@@ -91,6 +91,7 @@ module "gcp" {
   max_node_count_dynamic_green         = var.max_node_count_dynamic_green
   dynamic_green_node_pool_taints       = var.dynamic_green_node_pool_taints
   enable_gvisor_dynamic_green          = var.enable_gvisor_dynamic_green
+  natgateway_external_ip_list          = var.natgateway_external_ip_list
 }
 
 # Install tiller, which is the server-side component
