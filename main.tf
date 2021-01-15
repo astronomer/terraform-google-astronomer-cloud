@@ -2,8 +2,8 @@
 # Networks, Database, Kubernetes cluster, etc.
 module "gcp" {
 
-  source                  = "astronomer/astronomer-gcp/google"
-  version                 = "1.0.265"
+  source = "github.com/astronomer/terraform-google-astronomer-gcp?ref=1.1.3"
+
   email                   = var.email
   deployment_id           = var.deployment_id
   dns_managed_zone        = var.dns_managed_zone
@@ -24,6 +24,9 @@ module "gcp" {
 
   # Kube version minimum
   kube_version_gke = var.kube_version_gke
+
+  # GKE Release channel
+  gke_release_channel = var.gke_release_channel
 
   # don't create A record - we intend to do so manually.
   do_not_create_a_record = var.do_not_create_a_record
@@ -72,6 +75,23 @@ module "gcp" {
   max_node_count_dynamic               = var.max_node_count_dynamic
   enable_gvisor_dynamic                = var.enable_gvisor_dynamic
   machine_type_dynamic                 = var.machine_type_dynamic
+  enable_dynamic_blue_node_pool        = var.enable_dynamic_blue_node_pool
+  dynamic_blue_np_initial_node_count   = var.dynamic_blue_np_initial_node_count
+  machine_type_dynamic_blue            = var.machine_type_dynamic_blue
+  disk_size_dynamic_blue               = var.disk_size_dynamic_blue
+  disk_type_dynamic_blue               = var.disk_type_dynamic_blue
+  max_node_count_dynamic_blue          = var.max_node_count_dynamic_blue
+  dynamic_blue_node_pool_taints        = var.dynamic_blue_node_pool_taints
+  enable_gvisor_dynamic_blue           = var.enable_gvisor_dynamic_blue
+  enable_dynamic_green_node_pool       = var.enable_dynamic_green_node_pool
+  dynamic_green_np_initial_node_count  = var.dynamic_green_np_initial_node_count
+  machine_type_dynamic_green           = var.machine_type_dynamic_green
+  disk_size_dynamic_green              = var.disk_size_dynamic_green
+  disk_type_dynamic_green              = var.disk_type_dynamic_green
+  max_node_count_dynamic_green         = var.max_node_count_dynamic_green
+  dynamic_green_node_pool_taints       = var.dynamic_green_node_pool_taints
+  enable_gvisor_dynamic_green          = var.enable_gvisor_dynamic_green
+  natgateway_external_ip_list          = var.natgateway_external_ip_list
 }
 
 # Install tiller, which is the server-side component
@@ -80,8 +100,7 @@ module "gcp" {
 module "system_components" {
   dependencies = [module.gcp.depended_on]
 
-  source  = "astronomer/astronomer-system-components/kubernetes"
-  version = "0.1.19"
+  source = "github.com/astronomer/terraform-kubernetes-astronomer-system-components?ref=0.1.22"
 
   astronomer_namespace               = var.astronomer_namespace
   enable_cloud_sql_proxy             = var.enable_cloud_sql_proxy
@@ -95,7 +114,7 @@ module "system_components" {
   gcp_project                        = module.gcp.gcp_project
   extra_istio_helm_values            = local.extra_istio_helm_values
   extra_googlesqlproxy_helm_values   = local.extra_googlesqlproxy_helm_values
-  cloud_sql_proxy_helm_chart_version = "0.19.2"
+  cloud_sql_proxy_helm_chart_version = "0.19.6"
   istio_helm_release_version         = "1.4.3"
   kubecost_helm_chart_version        = "1.45.1"
   tiller_version                     = var.tiller_version
@@ -110,8 +129,7 @@ module "system_components" {
 module "astronomer" {
   dependencies = [module.system_components.depended_on, module.gcp.depended_on]
 
-  source  = "astronomer/astronomer/kubernetes"
-  version = "1.1.90"
+  source = "github.com/astronomer/terraform-kubernetes-astronomer?ref=1.1.90-1"
 
   astronomer_namespace            = var.astronomer_namespace
   install_astronomer_helm_chart   = var.install_astronomer_helm_chart
@@ -123,9 +141,12 @@ module "astronomer" {
   astronomer_helm_chart_repo      = var.astronomer_helm_chart_repo
   astronomer_helm_chart_repo_url  = var.astronomer_helm_chart_repo_url
 
-  db_connection_string = "postgres://${module.gcp.db_connection_user}:${module.gcp.db_connection_password}@pg-sqlproxy-gcloud-sqlproxy.astronomer:5432"
-  tls_cert             = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
-  tls_key              = var.tls_key == "" ? module.gcp.tls_key : var.tls_key
+  db_connection_string = module.gcp.db_connection_string
+
+  # If var.tls_cert is an empty string then the result is "var.tls_cert",
+  # but otherwise it is the actual value of var.tls_cert.
+  tls_cert = var.tls_cert == "" ? module.gcp.tls_cert : var.tls_cert
+  tls_key  = var.tls_key == "" ? module.gcp.tls_key : var.tls_key
 
   gcp_default_service_account_key = module.gcp.gcp_default_service_account_key
 
