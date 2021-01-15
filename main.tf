@@ -129,7 +129,7 @@ module "system_components" {
 module "astronomer" {
   dependencies = [module.system_components.depended_on, module.gcp.depended_on]
 
-  source = "github.com/astronomer/terraform-kubernetes-astronomer?ref=gke-channels"
+  source = "github.com/astronomer/terraform-kubernetes-astronomer?ref=1.1.90-1"
 
   astronomer_namespace            = var.astronomer_namespace
   install_astronomer_helm_chart   = var.install_astronomer_helm_chart
