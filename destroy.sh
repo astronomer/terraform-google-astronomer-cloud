@@ -7,20 +7,18 @@ if [[ ! -f $1 ]]; then
   exit 1
 fi
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-management_api=$(sed -En 's|'management_api'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' $1)
+management_api=$(sed -En 's|'management_api'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' "$1")
 
 if [[ "${management_api}" != "public" ]]; then
-	BASTION=$(sed -En 's|'deployment_id'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' $1)-bastion
+	BASTION=$(sed -En 's|'deployment_id'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' "$1")-bastion
 	ZONE=$(gcloud compute instances list --filter="name=('$BASTION')" --format 'csv[no-heading](zone)')
-	gcloud beta compute ssh --zone ${ZONE} ${BASTION} --tunnel-through-iap --ssh-flag='-L 1234:127.0.0.1:8888 -C -N' &
+	gcloud beta compute ssh --zone "${ZONE}" "${BASTION}" --tunnel-through-iap --ssh-flag='-L 1234:127.0.0.1:8888 -C -N' &
 
 	PROXY_PID=$!
 	# similar to 'finally' in Python
 	function finish {
 	  # Your cleanup code here
-	  kill ${PROXY_PID}
+	  kill "${PROXY_PID}"
 	}
 	trap finish EXIT
 	sleep 5 # give the proxy time to establish
@@ -36,7 +34,7 @@ fi
 terraform state rm module.astronomer
 terraform state rm module.system_components
 
-terraform destroy -var-file=$1  -target=module.gcp
+terraform destroy -var-file="$1"  -target=module.gcp
 
 if [[ "${management_api}" != "public" ]]; then
 	# Clear Proxy Variables

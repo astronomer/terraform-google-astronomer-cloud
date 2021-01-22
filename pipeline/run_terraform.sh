@@ -1,9 +1,10 @@
 #!/bin/bash
 
-echo $GOOGLE_CREDENTIAL_FILE_CONTENT > /tmp/account.json
+echo "${GOOGLE_CREDENTIAL_FILE_CONTENT}" > /tmp/account.json
 
 set -xe
 
+# shellcheck disable=SC2010
 ls /tmp | grep account
 
 export GOOGLE_APPLICATION_CREDENTIALS='/tmp/account.json'
@@ -16,20 +17,20 @@ DEPLOYMENT_ID=ci$(echo "$DRONE_REPO_NAME$DRONE_BUILD_NUMBER" | md5sum | awk '{pr
 ZONAL='true'
 PROJECT='astronomer-cloud-dev-236021'
 
-if [ $REGIONAL -eq 1 ]; then
-  DEPLOYMENT_ID=regional$DEPLOYMENT_ID
+if [ "$REGIONAL" -eq 1 ]; then
+  DEPLOYMENT_ID="regional${DEPLOYMENT_ID}"
   ZONAL='false'
 fi
 
-echo $DEPLOYMENT_ID
+echo "$DEPLOYMENT_ID"
 
-cp providers.tf.example examples/$EXAMPLE/providers.tf
-cp backend.tf.example examples/$EXAMPLE/backend.tf
-cd examples/$EXAMPLE
+cp providers.tf.example "examples/$EXAMPLE/providers.tf"
+cp backend.tf.example "examples/$EXAMPLE/backend.tf"
+cd "examples/$EXAMPLE"
 
-sed -i "s/REPLACE/$DEPLOYMENT_ID/g" backend.tf
+sed -i "s/REPLACE/${DEPLOYMENT_ID}/g" backend.tf
 sed -i "s/BUCKET/cloud2-dev-terraform/g" backend.tf
-sed -i "s/PROJECT/$PROJECT/g" providers.tf
+sed -i "s/PROJECT/${PROJECT}/g" providers.tf
 
 cat providers.tf
 cat backend.tf
@@ -46,22 +47,22 @@ PATH=$PATH:/root/gcloud/google-cloud-sdk/bin
 gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
 gcloud config set project $PROJECT
 
-if [ $DESTROY -eq 1 ]; then
+if [ "$DESTROY" -eq 1 ]; then
 
     # don't error out if some of these fail
     set +e
 
     # whitelist our current IP for kube management API
-    gcloud container clusters update $DEPLOYMENT_ID-cluster --enable-master-authorized-networks --master-authorized-networks="$(curl -sS https://api.ipify.org)/32" --zone=us-east4-a
+    gcloud container clusters update "${DEPLOYMENT_ID}-cluster" --enable-master-authorized-networks --master-authorized-networks="$(curl -sS https://api.ipify.org)/32" --zone=us-east4-a
 
     # copy the kubeconfig from the terraform state
     terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
     chmod 755 kubeconfig
-    export KUBECONFIG=$(pwd)/kubeconfig
+    export KUBECONFIG="$PWD/kubeconfig"
 
     # delete everything from kube
     helm init --client-only
-    helm del $(helm ls --all --short) --purge
+    helm ls --all --short | xargs -I{} helm del {} --purge
     kubectl delete namespace astronomer
 
     # remove the stuff we just delete from kube from the tf state
