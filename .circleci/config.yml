@@ -35,7 +35,7 @@ jobs:
       - image: quay.io/astronomer/ci-pre-commit:2021-01
     steps:
       - checkout
-      - run: pre-commit run --all-files || git --no-pager diff
+      - run: pre-commit run --all-files || { git --no-pager diff && false ; }
 
   terraform_lint:
     docker:
