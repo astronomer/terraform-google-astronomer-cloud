@@ -7,10 +7,12 @@ if [[ ! -f $1 ]]; then
   exit 1
 fi
 
-terraform init
+TERRAFORM="${TERRAFORM:-terraform}"
+
+${TERRAFORM} init
 
 # deploy EKS, RDS
-terraform apply -var-file="$1" --target=module.gcp
+${TERRAFORM} apply -var-file="$1" --target=module.gcp
 
 management_api=$(sed -En 's|'management_api'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' "$1")
 
@@ -36,10 +38,10 @@ if [[ "${management_api}" != "public" ]]; then
 fi
 
 # install Tiller in the cluster
-terraform apply -var-file="$1" --target=module.system_components
+${TERRAFORM} apply -var-file="$1" --target=module.system_components
 
 # install astronomer in the cluster
-terraform apply -var-file="$1" --target=module.astronomer
+${TERRAFORM} apply -var-file="$1" --target=module.astronomer
 
 if [[ "${management_api}" != "public" ]]; then
 	# Clear Proxy Variables

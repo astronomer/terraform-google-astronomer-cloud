@@ -9,7 +9,9 @@ ls /tmp | grep account
 
 export GOOGLE_APPLICATION_CREDENTIALS='/tmp/account.json'
 
-terraform -v
+TERRAFORM="${TERRAFORM:-terraform}"
+
+${TERRAFORM} -v
 
 # unique deployment ID to avoid collisions in CI
 # needs to be 32 characters or less and start with letter
@@ -35,7 +37,7 @@ sed -i "s/PROJECT/${PROJECT}/g" providers.tf
 cat providers.tf
 cat backend.tf
 
-terraform init
+${TERRAFORM} init
 
 # TODO: add to CI image
 apk add --update python curl which bash jq
@@ -56,7 +58,7 @@ if [ "$DESTROY" -eq 1 ]; then
     gcloud container clusters update "${DEPLOYMENT_ID}-cluster" --enable-master-authorized-networks --master-authorized-networks="$(curl -sS https://api.ipify.org)/32" --zone=us-east4-a
 
     # copy the kubeconfig from the terraform state
-    terraform state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
+    ${TERRAFORM} state pull | jq -r '.resources[] | select(.module == "module.astronomer_cloud") | select(.name == "kubeconfig") | .instances[0].attributes.content' > kubeconfig
     chmod 755 kubeconfig
     export KUBECONFIG="$PWD/kubeconfig"
 
@@ -66,25 +68,25 @@ if [ "$DESTROY" -eq 1 ]; then
     kubectl delete namespace astronomer
 
     # remove the stuff we just delete from kube from the tf state
-    terraform state rm module.astronomer_cloud.module.astronomer
-    terraform state rm module.astronomer_cloud.module.system_components
+    ${TERRAFORM} state rm module.astronomer_cloud.module.astronomer
+    ${TERRAFORM} state rm module.astronomer_cloud.module.system_components
 
     # this resource should be ignored on destroy
     # remove it from the state to accomplish this
-    terraform state rm module.astronomer_cloud.module.gcp.google_sql_user.airflow
+    ${TERRAFORM} state rm module.astronomer_cloud.module.gcp.google_sql_user.airflow
 
     # resume normal failure
     set -e
 
-    terraform destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
+    ${TERRAFORM} destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 
 else
 
     # create this first in order to fail fast if it does not work
-    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp.google_service_networking_connection.private_vpc_connection
+    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp.google_service_networking_connection.private_vpc_connection
 
-    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
-    terraform apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
+    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
+    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
 fi
 
 rm providers.tf
