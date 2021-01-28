@@ -2,7 +2,7 @@
 version: 2.1
 
 workflows:
-  test:
+  pre_commit:
     jobs:
       - run_pre_commit
   terraform_pipeline:
