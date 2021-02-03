@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo "${GOOGLE_CREDENTIAL_FILE_CONTENT}" > /tmp/account.json
 
@@ -15,7 +15,7 @@ ${TERRAFORM} -v
 
 # unique deployment ID to avoid collisions in CI
 # needs to be 32 characters or less and start with letter
-DEPLOYMENT_ID=ci$(echo "$DRONE_REPO_NAME$DRONE_BUILD_NUMBER" | md5sum | awk '{print substr($1,0,5)}')
+DEPLOYMENT_ID=ci$(date +%s)
 ZONAL='true'
 PROJECT='astronomer-cloud-dev-236021'
 
@@ -39,13 +39,6 @@ cat backend.tf
 
 ${TERRAFORM} init
 
-# TODO: add to CI image
-apk add --update python curl which bash jq
-curl -sSL https://sdk.cloud.google.com > /tmp/gcl
-bash /tmp/gcl --install-dir=~/gcloud --disable-prompts > /dev/null 2>&1
-PATH=$PATH:/root/gcloud/google-cloud-sdk/bin
-
-# Set up gcloud CLI
 gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
 gcloud config set project $PROJECT
 
