@@ -36,7 +36,7 @@ module "gcp" {
   lets_encrypt = var.lets_encrypt
 
   cloud_sql_tier     = var.db_instance_size
-  db_max_connections = 2000
+  db_max_connections = var.db_max_connections
 
   # Enable KEDA
   webhook_ports = ["6443"]

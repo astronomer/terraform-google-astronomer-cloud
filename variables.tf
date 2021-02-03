@@ -9,6 +9,11 @@ variable "db_instance_size" {
   type    = string
 }
 
+variable "db_max_connections" {
+  default = 2000
+  type    = number
+}
+
 variable "stripe_secret_key" {
   default = ""
   type    = string
