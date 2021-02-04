@@ -9,6 +9,8 @@ ls /tmp | grep account
 
 export GOOGLE_APPLICATION_CREDENTIALS='/tmp/account.json'
 
+[[ -n "$DESTROY" ]] || DESTROY=0
+
 TERRAFORM="${TERRAFORM:-terraform}"
 
 ${TERRAFORM} -v
