@@ -13,7 +13,7 @@ module "astronomer_cloud" {
   source                 = "../.."
   deployment_id          = var.deployment_id
   dns_managed_zone       = var.dns_managed_zone
-  email                  = "steven@astronomer.io"
+  email                  = "infrastructure@astronomer.io"
   zonal_cluster          = var.zonal
   management_api         = "public"
   kubeconfig_path        = var.kubeconfig_path

@@ -73,15 +73,15 @@ if [ "$DESTROY" -eq 1 ]; then
     # resume normal failure
     set -e
 
-    ${TERRAFORM} destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
+    ${TERRAFORM} destroy --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=example-zone" -lock=false -refresh=false
 
 else
 
     # create this first in order to fail fast if it does not work
-    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp.google_service_networking_connection.private_vpc_connection
+    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=example-zone" -lock=false --target=module.astronomer_cloud.module.gcp.google_service_networking_connection.private_vpc_connection
 
-    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false --target=module.astronomer_cloud.module.gcp
-    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=steven-zone" -lock=false -refresh=false
+    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=example-zone" -lock=false --target=module.astronomer_cloud.module.gcp
+    ${TERRAFORM} apply --auto-approve -var "deployment_id=$DEPLOYMENT_ID" -var "zonal=$ZONAL" -var "dns_managed_zone=example-zone" -lock=false -refresh=false
 fi
 
 rm providers.tf
