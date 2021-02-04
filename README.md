@@ -69,7 +69,7 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
    ./deploy.sh terraform.tfvars
    ```
 
-   This bash script will run all the necessary Terraform steps.
+   This bash script would run all the necessary Terraform steps.
 
 ## Destroy Deployment
 
