@@ -15,6 +15,7 @@ workflows:
             - terraform_lint
           context:
             - slack
+            - gcp-dev
       - git_tag:
           context:
             - github-repo
