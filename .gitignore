@@ -1,10 +1,10 @@
-helm.astronomer.io
-.terraform
-.idea
-secrets
+*terraform.tfstate*
 .DS_Store
+.idea
+.terraform
+helm.astronomer.io
 istio
 kubeconfig*
-*terraform.tfstate*
 providers.tf
+secrets
 terraform.tfvars
