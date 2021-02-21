@@ -1,3 +1,10 @@
+#####################################################################################################
+#                                                                                                   #
+#   This is just here for historic purposes. The file was renamed from .drone.yml to drone.yml to   #
+#   keep drone from acting on it. This should not be merged into master.                            #
+#                                                                                                   #
+#####################################################################################################
+
 kind: pipeline
 name: terraform-google-astronomer-cloud
 
@@ -30,7 +37,7 @@ steps:
         echo $example
         terraform init
         terraform fmt -check=true
-        terraform validate -var "deployment_id=citest" -var "dns_managed_zone=steven-zone" -var "astronomer_helm_values=''"
+        terraform validate -var "deployment_id=citest" -var "dns_managed_zone=example-zone" -var "astronomer_helm_values=''"
         rm providers.tf
         rm -rf .terraform
         cd -

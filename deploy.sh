@@ -7,19 +7,19 @@ if [[ ! -f $1 ]]; then
   exit 1
 fi
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+TERRAFORM="${TERRAFORM:-terraform}"
 
-terraform init
+${TERRAFORM} init
 
 # deploy EKS, RDS
-terraform apply -var-file=$1 --target=module.gcp
+${TERRAFORM} apply -var-file="$1" --target=module.gcp
 
-management_api=$(sed -En 's|'management_api'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' $1)
+management_api=$(sed -En 's|'management_api'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' "$1")
 
 if [[ "${management_api}" != "public" ]]; then
-	BASTION=$(sed -En 's|'deployment_id'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' $1)-bastion
+	BASTION=$(sed -En 's|'deployment_id'[[:space:]]+=[[:space:]]+"(.+)"|\1|p' "$1")-bastion
 	ZONE=$(gcloud compute instances list --filter="name=('$BASTION')" --format 'csv[no-heading](zone)')
-	gcloud beta compute ssh --zone ${ZONE} ${BASTION} --tunnel-through-iap --ssh-flag='-L 1234:127.0.0.1:8888 -C -N' &
+	gcloud beta compute ssh --zone "${ZONE}" "${BASTION}" --tunnel-through-iap --ssh-flag='-L 1234:127.0.0.1:8888 -C -N' &
 
 	PROXY_PID=$!
 	# similar to 'finally' in Python
@@ -38,10 +38,10 @@ if [[ "${management_api}" != "public" ]]; then
 fi
 
 # install Tiller in the cluster
-terraform apply -var-file=$1 --target=module.system_components
+${TERRAFORM} apply -var-file="$1" --target=module.system_components
 
 # install astronomer in the cluster
-terraform apply -var-file=$1 --target=module.astronomer
+${TERRAFORM} apply -var-file="$1" --target=module.astronomer
 
 if [[ "${management_api}" != "public" ]]; then
 	# Clear Proxy Variables

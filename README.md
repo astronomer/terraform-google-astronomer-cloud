@@ -29,10 +29,10 @@ These modules are downloaded from Terraform Registry into a local `.terraform` d
 
    Example:
 
-   ```
-   email            = "kaxil@astronomer.io"
+   ```terraform
+   email            = "testuser@astronomer.io"
    deployment_id    = "staging"
-   dns_managed_zone = "steven-zone"
+   dns_managed_zone = "testuser-zone"
    management_api   = "public"
    ```
 
