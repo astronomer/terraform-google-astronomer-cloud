@@ -69,6 +69,8 @@ mixer:
     autoscaleMin: 2
   telemetry:
     autoscaleMin: 2
+prometheus:
+  enabled: false
 EOF
 
   extra_velero_helm_values = <<EOF
